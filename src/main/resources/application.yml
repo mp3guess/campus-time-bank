@@ -20,11 +20,6 @@ spring:
   flyway:
     locations: classpath:db/migration
     baseline-on-migrate: true
-    
-  security:
-    user:
-      name: admin
-      password: admin
       
 server:
   port: 8080
@@ -42,3 +37,10 @@ logging:
   level:
     com.campus.timebank: DEBUG
     org.springframework.security: DEBUG
+
+app:
+  jwt:
+    secret: mySecretKeyForJWTTokenGenerationWhichShouldBeVeryLongAndSecure12345678
+    expiration: 86400000  # 24 hours
+  wallet:
+    initial-balance: 10.00

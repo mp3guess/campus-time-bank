@@ -1,1 +1,12 @@
--- TODO: Implement wallets table creation
+CREATE TABLE wallets (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL UNIQUE,
+    balance NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
+    total_earned NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
+    total_spent NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_wallet_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_wallets_user_id ON wallets(user_id);
