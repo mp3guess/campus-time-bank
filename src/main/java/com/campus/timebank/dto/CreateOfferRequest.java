@@ -1,27 +1,26 @@
 package com.campus.timebank.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OfferDto {
-    private Long id;
-    private Long ownerId;
-    private String ownerName;
+public class CreateOfferRequest {
+    
+    @NotBlank(message = "Title is required")
     private String title;
+    
+    @NotBlank(message = "Description is required")
     private String description;
+    
+    @Positive(message = "Hours rate must be positive")
     private BigDecimal hoursRate;
-    private String status;
-    private Boolean available;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private Integer bookingCount;
 }
