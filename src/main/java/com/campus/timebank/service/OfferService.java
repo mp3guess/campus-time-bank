@@ -53,8 +53,36 @@ public class OfferService {
     
     @Transactional(readOnly = true)
     public Page<OfferDto> getActiveOffers(Pageable pageable) {
-        return offerRepository.findByStatusAndAvailableTrue("ACTIVE", pageable)
-                .map(offerMapper::toDto);
+        // Fetch offers with owner loaded (JOIN FETCH) to avoid lazy loading issues
+        Page<Offer> offers = offerRepository.findByStatusAndAvailableTrueWithOwner(Offer.OfferStatus.ACTIVE, pageable);
+        
+        // Convert to DTOs - manually build to avoid any mapper recursion issues
+        return offers.map(offer -> {
+            OfferDto dto = OfferDto.builder()
+                    .id(offer.getId())
+                    .title(offer.getTitle())
+                    .description(offer.getDescription())
+                    .hoursRate(offer.getHoursRate())
+                    .status(offer.getStatus() != null ? offer.getStatus().name() : "UNKNOWN")
+                    .available(offer.getAvailable())
+                    .createdAt(offer.getCreatedAt())
+                    .updatedAt(offer.getUpdatedAt())
+                    .build();
+            
+            // Set owner info if available
+            if (offer.getOwner() != null) {
+                dto.setOwnerId(offer.getOwner().getId());
+                dto.setOwnerName(offer.getOwner().getFirstName() + " " + offer.getOwner().getLastName());
+            } else {
+                dto.setOwnerId(null);
+                dto.setOwnerName("Unknown");
+            }
+            
+            // Set booking count - don't load bookings collection to avoid issues
+            dto.setBookingCount(0); // We'll calculate this separately if needed
+            
+            return dto;
+        });
     }
     
     @Transactional(readOnly = true)

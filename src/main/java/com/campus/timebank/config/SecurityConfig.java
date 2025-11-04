@@ -17,6 +17,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -46,15 +51,39 @@ public class SecurityConfig {
     }
     
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        // Allow all origins for development
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        // Note: allowCredentials cannot be true with "*" origin pattern
+        // For local development, this should work fine
+        configuration.setAllowCredentials(false);
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+    
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        // Allow OPTIONS requests for CORS preflight
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                        // Public endpoints
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/admin/create-admin").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
+                        // Public GET requests to offers (viewing offers doesn't require auth)
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/offers/**").permitAll()
+                        // All other requests require authentication
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

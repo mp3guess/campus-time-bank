@@ -15,13 +15,13 @@ import java.util.Optional;
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Long> {
     
-    Page<Offer> findByStatus(String status, Pageable pageable);
+    Page<Offer> findByStatus(Offer.OfferStatus status, Pageable pageable);
     
     Page<Offer> findByAvailableTrue(Pageable pageable);
     
     Page<Offer> findByOwner(User owner, Pageable pageable);
     
-    Page<Offer> findByStatusAndAvailableTrue(String status, Pageable pageable);
+    Page<Offer> findByStatusAndAvailableTrue(Offer.OfferStatus status, Pageable pageable);
     
     List<Offer> findByOwnerId(Long ownerId);
     
@@ -32,4 +32,8 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
     
     @Query("SELECT COUNT(b) FROM Booking b WHERE b.offer.id = :offerId AND b.status IN ('PENDING', 'CONFIRMED')")
     Long countPendingBookings(@Param("offerId") Long offerId);
+    
+    @Query(value = "SELECT o FROM Offer o LEFT JOIN FETCH o.owner WHERE o.status = :status AND o.available = true ORDER BY o.createdAt DESC",
+           countQuery = "SELECT COUNT(o) FROM Offer o WHERE o.status = :status AND o.available = true")
+    Page<Offer> findByStatusAndAvailableTrueWithOwner(@Param("status") Offer.OfferStatus status, Pageable pageable);
 }

@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus TimeBank</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: #555;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #fafafa;
+            border-radius: 5px;
+        }
+        
+        form {
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            margin-top: 5px;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        button.secondary {
+            background: #6c757d;
+        }
+        
+        button.secondary:hover {
+            background: #545b62;
+        }
+        
+        button.danger {
+            background: #dc3545;
+        }
+        
+        button.danger:hover {
+            background: #c82333;
+        }
+        
+        button.success {
+            background: #28a745;
+        }
+        
+        button.success:hover {
+            background: #218838;
+        }
+        
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            white-space: pre-line;
+            word-wrap: break-word;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .user-info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .user-info h3 {
+            margin-bottom: 10px;
+            color: #004085;
+        }
+        
+        .item-list {
+            display: grid;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .item-card {
+            background: white;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .item-card h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .item-card p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .item-card .actions {
+            margin-top: 10px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .badge.active {
+            background: #28a745;
+            color: white;
+        }
+        
+        .badge.inactive {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .badge.pending {
+            background: #ffc107;
+            color: #000;
+        }
+        
+        .badge.confirmed {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .badge.completed {
+            background: #28a745;
+            color: white;
+        }
+        
+        .badge.cancelled {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .pagination {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .pagination button {
+            margin: 0;
+        }
+        
+        .admin-section {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏦 Campus TimeBank</h1>
+        
+        <!-- Connection Status -->
+        <div class="section" id="connectionStatus" style="background: #fff3cd; border: 2px solid #ffc107;">
+            <h3>🔌 Connection Status</h3>
+            <p id="statusText">Checking connection...</p>
+            <button onclick="checkConnection()">Check Connection</button>
+            <p style="font-size: 12px; margin-top: 10px; color: #666;">
+                <strong>📋 Setup Instructions:</strong><br>
+                1. Start backend: <code style="background: #f0f0f0; padding: 1px 3px;">./start.sh</code><br>
+                2. Start HTTP server: <code style="background: #f0f0f0; padding: 1px 3px;">python3 -m http.server 8000</code><br>
+                3. Open: <code style="background: #f0f0f0; padding: 1px 3px;">http://localhost:8000/index.html</code><br>
+                <strong>⚠️ Don't open index.html directly - use HTTP server!</strong>
+            </p>
+        </div>
+        
+        <!-- Auth Section -->
+        <div class="section" id="authSection">
+            <h2>Authentication</h2>
+            <div id="authMessage"></div>
+            
+            <h3>Register</h3>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>First Name:</label>
+                    <input type="text" id="registerFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name:</label>
+                    <input type="text" id="registerLastName" required>
+                </div>
+                <div class="form-group">
+                    <label>Faculty (optional):</label>
+                    <input type="text" id="registerFaculty">
+                </div>
+                <div class="form-group">
+                    <label>Student ID (optional):</label>
+                    <input type="text" id="registerStudentId">
+                </div>
+                <button type="submit">Register</button>
+            </form>
+            
+            <h3>Login</h3>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+        
+        <!-- User Info Section -->
+        <div class="section hidden" id="userSection">
+            <h2>My Profile</h2>
+            <div id="userInfo" class="user-info"></div>
+            <button onclick="refreshUserInfo()">Refresh Profile</button>
+            <button class="secondary" onclick="logout()">Logout</button>
+        </div>
+        
+        <!-- Offers Section -->
+        <div class="section hidden" id="offersSection">
+            <h2>Offers</h2>
+            
+            <h3>Create Offer</h3>
+            <form id="createOfferForm">
+                <div class="form-group">
+                    <label>Title:</label>
+                    <input type="text" id="offerTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea id="offerDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Hours Rate:</label>
+                    <input type="number" step="0.1" id="offerHoursRate" required>
+                </div>
+                <button type="submit">Create Offer</button>
+            </form>
+            
+            <h3>All Active Offers</h3>
+            <button onclick="loadActiveOffers()">Refresh</button>
+            <button onclick="loadActiveOffers(0)" style="background: #28a745;">Load First Page</button>
+            <div id="activeOffersList" class="item-list"></div>
+            <div id="activeOffersPagination" class="pagination"></div>
+            
+            <h3>My Offers</h3>
+            <button onclick="loadMyOffers()">Refresh</button>
+            <div id="myOffersList" class="item-list"></div>
+        </div>
+        
+        <!-- Bookings Section -->
+        <div class="section hidden" id="bookingsSection">
+            <h2>Bookings</h2>
+            
+            <h3>Create Booking</h3>
+            <form id="createBookingForm">
+                <div class="form-group">
+                    <label>Offer ID:</label>
+                    <input type="number" id="bookingOfferId" required>
+                </div>
+                <div class="form-group">
+                    <label>Hours:</label>
+                    <input type="number" step="0.1" id="bookingHours" required>
+                </div>
+                <button type="submit">Create Booking</button>
+            </form>
+            
+            <h3>My Bookings as Requester</h3>
+            <button onclick="loadMyBookingsAsRequester()">Refresh</button>
+            <div id="myBookingsRequesterList" class="item-list"></div>
+            <div id="myBookingsRequesterPagination" class="pagination"></div>
+            
+            <h3>My Bookings as Owner</h3>
+            <button onclick="loadMyBookingsAsOwner()">Refresh</button>
+            <div id="myBookingsOwnerList" class="item-list"></div>
+            <div id="myBookingsOwnerPagination" class="pagination"></div>
+        </div>
+        
+        <!-- Admin Section -->
+        <div class="section hidden admin-section" id="adminSection">
+            <h2>🔐 Admin Panel</h2>
+            
+            <h3>Create Admin</h3>
+            <form id="createAdminForm">
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="adminEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="adminPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>First Name:</label>
+                    <input type="text" id="adminFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name:</label>
+                    <input type="text" id="adminLastName" required>
+                </div>
+                <div class="form-group">
+                    <label>Faculty:</label>
+                    <input type="text" id="adminFaculty" value="Administration">
+                </div>
+                <button type="submit">Create Admin</button>
+            </form>
+            
+            <h3>All Users</h3>
+            <button onclick="loadAllUsers()">Refresh</button>
+            <div id="allUsersList" class="item-list"></div>
+            <div id="allUsersPagination" class="pagination"></div>
+            
+            <h3>All Transactions</h3>
+            <button onclick="loadAllTransactions()">Refresh</button>
+            <div id="allTransactionsList" class="item-list"></div>
+            <div id="allTransactionsPagination" class="pagination"></div>
+        </div>
+        
+        <div id="messageDiv"></div>
+    </div>
+    
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        let token = localStorage.getItem('token');
+        let currentUser = null;
+        let currentPage = {
+            activeOffers: 0,
+            myBookingsRequester: 0,
+            myBookingsOwner: 0,
+            allUsers: 0,
+            allTransactions: 0
+        };
+        
+        // Check if file is opened via file:// protocol
+        if (window.location.protocol === 'file:') {
+            const statusText = document.getElementById('statusText');
+            statusText.innerHTML = '⚠️ <strong>Warning:</strong> File opened directly (file://).<br><br>' +
+                'For proper CORS support, please use HTTP server:<br>' +
+                '<code style="background: #f0f0f0; padding: 2px 5px; border-radius: 3px;">python3 -m http.server 8000</code><br><br>' +
+                'Then open: <code style="background: #f0f0f0; padding: 2px 5px; border-radius: 3px;">http://localhost:8000/index.html</code>';
+            statusText.style.color = '#ffc107';
+        } else {
+            // Check connection on load
+            checkConnection();
+        }
+        
+        // Check if user is logged in
+        if (token) {
+            checkAuth();
+        }
+        
+        // Check backend connection
+        async function checkConnection() {
+            const statusText = document.getElementById('statusText');
+            statusText.innerHTML = 'Checking...';
+            statusText.style.color = '#666';
+            
+            // Check if using HTTP server
+            const currentUrl = window.location.href;
+            const isHttpServer = currentUrl.startsWith('http://') || currentUrl.startsWith('https://');
+            
+            if (!isHttpServer) {
+                statusText.innerHTML = '⚠️ <strong>File opened directly!</strong><br><br>' +
+                    'You must use HTTP server for CORS to work:<br><br>' +
+                    '<strong>1. Open terminal in project directory</strong><br>' +
+                    '<code style="background: #f0f0f0; padding: 2px 5px; border-radius: 3px;">python3 -m http.server 8000</code><br><br>' +
+                    '<strong>2. Open in browser:</strong><br>' +
+                    '<code style="background: #f0f0f0; padding: 2px 5px; border-radius: 3px;">http://localhost:8000/index.html</code>';
+                statusText.style.color = '#ffc107';
+                return;
+            }
+            
+            try {
+                // Try health endpoint first
+                const healthResponse = await fetch(`${API_BASE.replace('/api', '')}/actuator/health`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (healthResponse.ok) {
+                    const data = await healthResponse.json();
+                    statusText.innerHTML = '✅ <strong>Backend is running and accessible!</strong>';
+                    statusText.style.color = '#28a745';
+                    return;
+                } else {
+                    statusText.innerHTML = `⚠️ Backend responded with status ${healthResponse.status}`;
+                    statusText.style.color = '#ffc107';
+                    return;
+                }
+            } catch (error) {
+                console.error('Health check error:', error);
+                
+                // Show detailed error with solution
+                let errorDetails = '❌ <strong>Cannot connect to backend</strong><br><br>';
+                errorDetails += '<strong>Quick Fix:</strong><br>';
+                errorDetails += '1. Make sure backend is running:<br>';
+                errorDetails += '<code style="background: #f0f0f0; padding: 2px 5px; border-radius: 3px;">./start.sh</code><br><br>';
+                errorDetails += '2. Wait 20-30 seconds for backend to start<br><br>';
+                errorDetails += '3. Check backend is accessible:<br>';
+                errorDetails += '<code style="background: #f0f0f0; padding: 2px 5px; border-radius: 3px;">curl http://localhost:8080/actuator/health</code><br><br>';
+                errorDetails += '<strong>Error details:</strong><br>';
+                errorDetails += '<code style="background: #f0f0f0; padding: 2px 5px; border-radius: 3px;">' + (error.message || 'NetworkError when attempting to fetch resource') + '</code>';
+                
+                statusText.innerHTML = errorDetails;
+                statusText.style.color = '#dc3545';
+                console.error('Connection error:', error);
+            }
+        }
+        
+        // Register form
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Validate required fields
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const firstName = document.getElementById('registerFirstName').value.trim();
+            const lastName = document.getElementById('registerLastName').value.trim();
+            
+            if (!email || !password || !firstName || !lastName) {
+                showMessage('Please fill in all required fields (Email, Password, First Name, Last Name)', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters long', 'error');
+                return;
+            }
+            
+            const data = {
+                email: email,
+                password: password,
+                firstName: firstName,
+                lastName: lastName,
+                faculty: document.getElementById('registerFaculty').value.trim() || null,
+                studentId: document.getElementById('registerStudentId').value.trim() || null
+            };
+            
+            showMessage('Registering...', 'success');
+            
+            try {
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                let result;
+                const contentType = response.headers.get('content-type');
+                
+                try {
+                    if (contentType && contentType.includes('application/json')) {
+                        result = await response.json();
+                    } else {
+                        const text = await response.text();
+                        result = { message: text || `Registration failed with status ${response.status}` };
+                    }
+                } catch (parseError) {
+                    const text = await response.text();
+                    result = { message: text || `Registration failed with status ${response.status}` };
+                }
+                
+                if (response.ok) {
+                    if (result.token && result.user) {
+                        token = result.token;
+                        localStorage.setItem('token', token);
+                        currentUser = result.user;
+                        showMessage('Registration successful! Welcome!', 'success');
+                        document.getElementById('registerForm').reset();
+                        updateUI();
+                        refreshUserInfo();
+                    } else {
+                        showMessage('Registration successful, but response format is invalid', 'error');
+                    }
+                } else {
+                    // Handle different error statuses
+                    let errorMsg = 'Registration failed';
+                    if (response.status === 409) {
+                        errorMsg = 'Email already registered. Please use a different email or try logging in.';
+                    } else if (response.status === 400) {
+                        errorMsg = result.message || result.error || 'Invalid registration data. Please check your input.';
+                        if (typeof result === 'object' && result !== null) {
+                            // Handle validation errors
+                            const errors = Object.values(result).join(', ');
+                            if (errors) errorMsg = errors;
+                        }
+                    } else if (response.status === 403) {
+                        errorMsg = 'Registration is not allowed. Please contact administrator.';
+                    } else {
+                        errorMsg = result.message || result.error || `Registration failed (HTTP ${response.status})`;
+                    }
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    showMessage('Cannot connect to server. Please make sure:\n1. Backend is running (./start.sh)\n2. Backend is accessible at http://localhost:8080\n3. Check browser console (F12) for details', 'error');
+                } else if (error.message.includes('CORS')) {
+                    showMessage('CORS error: Backend may not be configured correctly. Check server logs.', 'error');
+                } else {
+                    showMessage('Error: ' + error.message, 'error');
+                }
+            }
+        });
+        
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                email: document.getElementById('loginEmail').value,
+                password: document.getElementById('loginPassword').value
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                let result;
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    result = await response.json();
+                } else {
+                    const text = await response.text();
+                    throw new Error(text || `Login failed with status ${response.status}`);
+                }
+                
+                if (response.ok) {
+                    token = result.token;
+                    localStorage.setItem('token', token);
+                    currentUser = result.user;
+                    showMessage('Login successful!', 'success');
+                    updateUI();
+                    refreshUserInfo();
+                } else {
+                    const errorMsg = result.message || result.error || `Login failed (${response.status})`;
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error: ' + error.message, 'error');
+                }
+            }
+        });
+        
+        // Create offer form
+        document.getElementById('createOfferForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                title: document.getElementById('offerTitle').value,
+                description: document.getElementById('offerDescription').value,
+                hoursRate: parseFloat(document.getElementById('offerHoursRate').value)
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/offers`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    showMessage('Offer created successfully!', 'success');
+                    document.getElementById('createOfferForm').reset();
+                    // Reload offers after a short delay to ensure backend processed it
+                    setTimeout(() => {
+                        loadActiveOffers();
+                        loadMyOffers();
+                    }, 500);
+                } else {
+                    let result;
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        result = await response.json();
+                    }
+                    const errorMsg = result?.message || result?.error || `Failed to create offer (${response.status})`;
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error: ' + error.message, 'error');
+                }
+            }
+        });
+        
+        // Create booking form
+        document.getElementById('createBookingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                offerId: parseInt(document.getElementById('bookingOfferId').value),
+                hours: parseFloat(document.getElementById('bookingHours').value)
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/bookings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    showMessage('Booking created successfully!', 'success');
+                    document.getElementById('createBookingForm').reset();
+                    // Reload bookings after a short delay
+                    setTimeout(() => {
+                        loadMyBookingsAsRequester();
+                        loadMyBookingsAsOwner();
+                        refreshUserInfo();
+                    }, 500);
+                } else {
+                    let result;
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        result = await response.json();
+                    }
+                    const errorMsg = result?.message || result?.error || `Failed to create booking (${response.status})`;
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error: ' + error.message, 'error');
+                }
+            }
+        });
+        
+        // Create admin form
+        document.getElementById('createAdminForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                email: document.getElementById('adminEmail').value,
+                password: document.getElementById('adminPassword').value,
+                firstName: document.getElementById('adminFirstName').value,
+                lastName: document.getElementById('adminLastName').value,
+                faculty: document.getElementById('adminFaculty').value
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/admin/create-admin`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    token = result.token;
+                    localStorage.setItem('token', token);
+                    currentUser = result.user;
+                    showMessage('Admin created successfully!', 'success');
+                    updateUI();
+                    refreshUserInfo();
+                } else {
+                    const result = await response.json();
+                    showMessage(result.message || 'Failed to create admin', 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        });
+        
+        // Load functions
+        async function loadActiveOffers(page = 0) {
+            try {
+                const response = await fetch(`${API_BASE}/offers/active/list?page=${page}&size=10`, {
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                });
+                
+                if (response.ok) {
+                    const text = await response.text();
+                    if (!text || text.trim() === '') {
+                        document.getElementById('activeOffersList').innerHTML = '<p>No active offers found. Create an offer to see it here!</p>';
+                        document.getElementById('activeOffersPagination').innerHTML = '';
+                        return;
+                    }
+                    
+                    let result;
+                    try {
+                        result = JSON.parse(text);
+                    } catch (parseError) {
+                        console.error('Failed to parse offers response:', parseError, 'Response:', text);
+                        document.getElementById('activeOffersList').innerHTML = '<p>Error parsing offers response</p>';
+                        return;
+                    }
+                    
+                    if (result && result.content && result.content.length > 0) {
+                        displayOffers(result.content, 'activeOffersList');
+                        displayPagination(result, 'activeOffersPagination', page, loadActiveOffers);
+                        currentPage.activeOffers = page;
+                    } else if (result && Array.isArray(result) && result.length > 0) {
+                        // Handle case where API returns array directly instead of page
+                        displayOffers(result, 'activeOffersList');
+                        document.getElementById('activeOffersPagination').innerHTML = '';
+                        currentPage.activeOffers = page;
+                    } else if (result && result.totalElements !== undefined && result.totalElements === 0) {
+                        document.getElementById('activeOffersList').innerHTML = '<p>No active offers found. Create an offer to see it here!</p>';
+                        document.getElementById('activeOffersPagination').innerHTML = '';
+                        currentPage.activeOffers = page;
+                    } else {
+                        document.getElementById('activeOffersList').innerHTML = '<p>No active offers found. Create an offer to see it here!</p>';
+                        document.getElementById('activeOffersPagination').innerHTML = '';
+                        currentPage.activeOffers = page;
+                    }
+                } else {
+                    const errorText = await response.text();
+                    console.error('Failed to load offers:', response.status, errorText);
+                    document.getElementById('activeOffersList').innerHTML = `<p>Failed to load offers (${response.status})</p>`;
+                }
+            } catch (error) {
+                console.error('Error loading offers:', error);
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    document.getElementById('activeOffersList').innerHTML = '<p>Cannot connect to server. Make sure backend is running.</p>';
+                } else {
+                    document.getElementById('activeOffersList').innerHTML = `<p>Error: ${error.message}</p>`;
+                }
+            }
+        }
+        
+        async function loadMyOffers() {
+            try {
+                const response = await fetch(`${API_BASE}/offers/my-offers`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const offers = await response.json();
+                    if (offers && offers.length > 0) {
+                        displayMyOffers(offers);
+                    } else {
+                        document.getElementById('myOffersList').innerHTML = '<p>You have no offers yet</p>';
+                    }
+                } else {
+                    const errorText = await response.text();
+                    showMessage(`Failed to load my offers: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error loading my offers: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        function displayOffers(offers, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (!offers || offers.length === 0) {
+                container.innerHTML = '<p>No offers found</p>';
+                return;
+            }
+            
+            offers.forEach(offer => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                const ownerName = offer.ownerName || (offer.ownerFirstName && offer.ownerLastName ? 
+                    `${offer.ownerFirstName} ${offer.ownerLastName}` : 'Unknown');
+                const ownerEmail = offer.ownerEmail || '';
+                const active = offer.active !== undefined ? offer.active : (offer.status === 'ACTIVE');
+                const bookingCount = offer.bookingCount !== undefined ? offer.bookingCount : 0;
+                card.innerHTML = `
+                    <h4>${escapeHtml(offer.title)} <span class="badge ${active ? 'active' : 'inactive'}">${active ? 'ACTIVE' : 'INACTIVE'}</span></h4>
+                    <p><strong>ID:</strong> ${offer.id} <span style="color: #666; font-size: 12px;">(use this ID to create a booking)</span></p>
+                    <p><strong>Description:</strong> ${escapeHtml(offer.description || '')}</p>
+                    <p><strong>Hours Rate:</strong> ${offer.hoursRate} hours</p>
+                    <p><strong>Owner:</strong> ${escapeHtml(ownerName)}${ownerEmail ? ` (${escapeHtml(ownerEmail)})` : ''}</p>
+                    <p><strong>Bookings:</strong> ${bookingCount}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        function displayMyOffers(offers) {
+            const container = document.getElementById('myOffersList');
+            container.innerHTML = '';
+            
+            if (!offers || offers.length === 0) {
+                container.innerHTML = '<p>You have no offers yet</p>';
+                return;
+            }
+            
+            offers.forEach(offer => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                const active = offer.active !== undefined ? offer.active : (offer.status === 'ACTIVE');
+                card.innerHTML = `
+                    <h4>${escapeHtml(offer.title)} <span class="badge ${active ? 'active' : 'inactive'}">${active ? 'ACTIVE' : 'INACTIVE'}</span></h4>
+                    <p><strong>ID:</strong> ${offer.id}</p>
+                    <p><strong>Description:</strong> ${escapeHtml(offer.description || '')}</p>
+                    <p><strong>Hours Rate:</strong> ${offer.hoursRate}</p>
+                    <div class="actions">
+                        <button onclick="updateOffer(${offer.id})">Edit</button>
+                        ${active ? 
+                            `<button class="secondary" onclick="deactivateOffer(${offer.id})">Deactivate</button>` :
+                            `<button class="success" onclick="activateOffer(${offer.id})">Activate</button>`
+                        }
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        // Helper function to escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        async function loadMyBookingsAsRequester(page = 0) {
+            try {
+                const response = await fetch(`${API_BASE}/bookings/my/as-requester?page=${page}&size=10`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.content && result.content.length > 0) {
+                        displayBookings(result.content, 'myBookingsRequesterList', true);
+                        displayPagination(result, 'myBookingsRequesterPagination', page, loadMyBookingsAsRequester);
+                    } else {
+                        document.getElementById('myBookingsRequesterList').innerHTML = '<p>No bookings found</p>';
+                    }
+                    currentPage.myBookingsRequester = page;
+                } else {
+                    const errorText = await response.text();
+                    showMessage(`Failed to load bookings: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error loading bookings: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        async function loadMyBookingsAsOwner(page = 0) {
+            try {
+                const response = await fetch(`${API_BASE}/bookings/my/as-owner?page=${page}&size=10`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.content && result.content.length > 0) {
+                        displayBookings(result.content, 'myBookingsOwnerList', false);
+                        displayPagination(result, 'myBookingsOwnerPagination', page, loadMyBookingsAsOwner);
+                    } else {
+                        document.getElementById('myBookingsOwnerList').innerHTML = '<p>No bookings found</p>';
+                    }
+                    currentPage.myBookingsOwner = page;
+                } else {
+                    const errorText = await response.text();
+                    showMessage(`Failed to load bookings: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error loading bookings: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        function displayBookings(bookings, containerId, isRequester) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (!bookings || bookings.length === 0) {
+                container.innerHTML = '<p>No bookings found</p>';
+                return;
+            }
+            
+            bookings.forEach(booking => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                
+                const statusClass = booking.status.toLowerCase();
+                const ownerName = booking.ownerFirstName && booking.ownerLastName ? 
+                    `${booking.ownerFirstName} ${booking.ownerLastName}` : booking.ownerName || 'Unknown';
+                const requesterName = booking.requesterFirstName && booking.requesterLastName ? 
+                    `${booking.requesterFirstName} ${booking.requesterLastName}` : booking.requesterName || 'Unknown';
+                
+                const actions = isRequester ? 
+                    `<button onclick="cancelBooking(${booking.id})">Cancel</button>` :
+                    `<button class="success" onclick="confirmBooking(${booking.id})">Confirm</button>
+                     <button class="success" onclick="completeBooking(${booking.id})">Complete</button>
+                     <button class="danger" onclick="cancelBooking(${booking.id})">Cancel</button>`;
+                
+                card.innerHTML = `
+                    <h4>Booking #${booking.id} <span class="badge ${statusClass}">${escapeHtml(booking.status)}</span></h4>
+                    <p><strong>Offer:</strong> ${escapeHtml(booking.offerTitle || 'N/A')} (ID: ${booking.offerId})</p>
+                    <p><strong>Hours:</strong> ${booking.hours}</p>
+                    <p><strong>Total Cost:</strong> ${booking.totalCost || booking.hours} hours</p>
+                    ${isRequester ? 
+                        `<p><strong>Owner:</strong> ${escapeHtml(ownerName)}</p>` :
+                        `<p><strong>Requester:</strong> ${escapeHtml(requesterName)}</p>`
+                    }
+                    <p><strong>Status:</strong> ${escapeHtml(booking.status)}</p>
+                    ${booking.status === 'PENDING' || booking.status === 'CONFIRMED' ? 
+                        `<div class="actions">${actions}</div>` : ''
+                    }
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        async function loadAllUsers(page = 0) {
+            try {
+                const response = await fetch(`${API_BASE}/admin/users?page=${page}&size=10`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.content && result.content.length > 0) {
+                        displayUsers(result.content, 'allUsersList');
+                        displayPagination(result, 'allUsersPagination', page, loadAllUsers);
+                    } else {
+                        document.getElementById('allUsersList').innerHTML = '<p>No users found</p>';
+                    }
+                    currentPage.allUsers = page;
+                } else {
+                    const errorText = await response.text();
+                    showMessage(`Access denied. Admin role required. (${response.status})`, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error loading users: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        function displayUsers(users, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (!users || users.length === 0) {
+                container.innerHTML = '<p>No users found</p>';
+                return;
+            }
+            
+            users.forEach(user => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                
+                const walletInfo = user.wallet ? 
+                    `<p><strong>Balance:</strong> ${user.wallet.balance} hours</p>
+                     <p><strong>Total Earned:</strong> ${user.wallet.totalEarned} hours</p>
+                     <p><strong>Total Spent:</strong> ${user.wallet.totalSpent} hours</p>` :
+                    '<p>No wallet</p>';
+                
+                card.innerHTML = `
+                    <h4>${escapeHtml(user.firstName)} ${escapeHtml(user.lastName)} <span class="badge ${user.active ? 'active' : 'inactive'}">${user.active ? 'ACTIVE' : 'INACTIVE'}</span></h4>
+                    <p><strong>ID:</strong> ${user.id}</p>
+                    <p><strong>Email:</strong> ${escapeHtml(user.email)}</p>
+                    <p><strong>Role:</strong> ${escapeHtml(user.role)}</p>
+                    <p><strong>Faculty:</strong> ${escapeHtml(user.faculty || 'N/A')}</p>
+                    ${walletInfo}
+                    <div class="actions">
+                        ${user.active ? 
+                            `<button class="secondary" onclick="deactivateUser(${user.id})">Deactivate</button>` :
+                            `<button class="success" onclick="activateUser(${user.id})">Activate</button>`
+                        }
+                        <button onclick="updateUserRole(${user.id})">Change Role</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        async function loadAllTransactions(page = 0) {
+            try {
+                const response = await fetch(`${API_BASE}/admin/transactions?page=${page}&size=10`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.content && result.content.length > 0) {
+                        displayTransactions(result.content, 'allTransactionsList');
+                        displayPagination(result, 'allTransactionsPagination', page, loadAllTransactions);
+                    } else {
+                        document.getElementById('allTransactionsList').innerHTML = '<p>No transactions found</p>';
+                    }
+                    currentPage.allTransactions = page;
+                } else {
+                    const errorText = await response.text();
+                    showMessage(`Access denied. Admin role required. (${response.status})`, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error loading transactions: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        function displayTransactions(transactions, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (!transactions || transactions.length === 0) {
+                container.innerHTML = '<p>No transactions found</p>';
+                return;
+            }
+            
+            transactions.forEach(transaction => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                const userName = transaction.userName || 'Unknown';
+                const userEmail = transaction.userEmail || 'N/A';
+                const description = transaction.description || 'N/A';
+                const date = transaction.createdAt ? new Date(transaction.createdAt).toLocaleString() : 'N/A';
+                card.innerHTML = `
+                    <h4>Transaction #${transaction.id}</h4>
+                    <p><strong>User:</strong> ${escapeHtml(userName)} (${escapeHtml(userEmail)})</p>
+                    <p><strong>Type:</strong> ${escapeHtml(transaction.type)}</p>
+                    <p><strong>Amount:</strong> ${transaction.amount} hours</p>
+                    <p><strong>Status:</strong> ${escapeHtml(transaction.status)}</p>
+                    <p><strong>Description:</strong> ${escapeHtml(description)}</p>
+                    <p><strong>Date:</strong> ${date}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        function displayPagination(data, containerId, currentPageNum, loadFunction) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (data.totalPages <= 1) return;
+            
+            if (currentPageNum > 0) {
+                const prevBtn = document.createElement('button');
+                prevBtn.textContent = 'Previous';
+                prevBtn.onclick = () => loadFunction(currentPageNum - 1);
+                container.appendChild(prevBtn);
+            }
+            
+            const pageInfo = document.createElement('span');
+            pageInfo.textContent = `Page ${currentPageNum + 1} of ${data.totalPages}`;
+            container.appendChild(pageInfo);
+            
+            if (currentPageNum < data.totalPages - 1) {
+                const nextBtn = document.createElement('button');
+                nextBtn.textContent = 'Next';
+                nextBtn.onclick = () => loadFunction(currentPageNum + 1);
+                container.appendChild(nextBtn);
+            }
+        }
+        
+        // Action functions
+        async function confirmBooking(bookingId) {
+            try {
+                const response = await fetch(`${API_BASE}/bookings/${bookingId}/confirm`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    showMessage('Booking confirmed!', 'success');
+                    loadMyBookingsAsOwner(currentPage.myBookingsOwner);
+                    loadMyBookingsAsRequester(currentPage.myBookingsRequester);
+                } else {
+                    const errorText = await response.text();
+                    let errorMsg = 'Failed to confirm booking';
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMsg = errorJson.message || errorMsg;
+                    } catch (e) {
+                        errorMsg = errorText || errorMsg;
+                    }
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        async function completeBooking(bookingId) {
+            try {
+                const response = await fetch(`${API_BASE}/bookings/${bookingId}/complete`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    showMessage('Booking completed!', 'success');
+                    loadMyBookingsAsOwner(currentPage.myBookingsOwner);
+                    loadMyBookingsAsRequester(currentPage.myBookingsRequester);
+                    refreshUserInfo();
+                } else {
+                    const errorText = await response.text();
+                    let errorMsg = 'Failed to complete booking';
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMsg = errorJson.message || errorMsg;
+                    } catch (e) {
+                        errorMsg = errorText || errorMsg;
+                    }
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        async function cancelBooking(bookingId) {
+            const reason = prompt('Cancellation reason (optional):');
+            if (reason === null) return; // User cancelled
+            
+            try {
+                const response = await fetch(`${API_BASE}/bookings/${bookingId}/cancel?reason=${encodeURIComponent(reason || 'No reason provided')}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    showMessage('Booking cancelled!', 'success');
+                    loadMyBookingsAsOwner(currentPage.myBookingsOwner);
+                    loadMyBookingsAsRequester(currentPage.myBookingsRequester);
+                    refreshUserInfo();
+                } else {
+                    const errorText = await response.text();
+                    let errorMsg = 'Failed to cancel booking';
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMsg = errorJson.message || errorMsg;
+                    } catch (e) {
+                        errorMsg = errorText || errorMsg;
+                    }
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        async function activateOffer(offerId) {
+            try {
+                const response = await fetch(`${API_BASE}/offers/${offerId}/activate`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    showMessage('Offer activated!', 'success');
+                    loadMyOffers();
+                    loadActiveOffers(currentPage.activeOffers);
+                } else {
+                    const errorText = await response.text();
+                    let errorMsg = 'Failed to activate offer';
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMsg = errorJson.message || errorMsg;
+                    } catch (e) {
+                        errorMsg = errorText || errorMsg;
+                    }
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        async function deactivateOffer(offerId) {
+            try {
+                const response = await fetch(`${API_BASE}/offers/${offerId}/deactivate`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    showMessage('Offer deactivated!', 'success');
+                    loadMyOffers();
+                    loadActiveOffers(currentPage.activeOffers);
+                } else {
+                    const errorText = await response.text();
+                    let errorMsg = 'Failed to deactivate offer';
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMsg = errorJson.message || errorMsg;
+                    } catch (e) {
+                        errorMsg = errorText || errorMsg;
+                    }
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        async function updateOffer(offerId) {
+            const title = prompt('New title:', '');
+            if (title === null) return; // User cancelled
+            
+            const description = prompt('New description:', '');
+            if (description === null) return;
+            
+            const hoursRate = prompt('New hours rate:', '');
+            if (hoursRate === null) return;
+            
+            if (!title || !description || !hoursRate) {
+                showMessage('All fields are required', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/offers/${offerId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        title,
+                        description,
+                        hoursRate: parseFloat(hoursRate)
+                    })
+                });
+                
+                if (response.ok) {
+                    showMessage('Offer updated!', 'success');
+                    loadMyOffers();
+                    loadActiveOffers(currentPage.activeOffers);
+                } else {
+                    const errorText = await response.text();
+                    let errorMsg = 'Failed to update offer';
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMsg = errorJson.message || errorMsg;
+                    } catch (e) {
+                        errorMsg = errorText || errorMsg;
+                    }
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        async function activateUser(userId) {
+            try {
+                const response = await fetch(`${API_BASE}/admin/users/${userId}/activate`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    showMessage('User activated!', 'success');
+                    loadAllUsers(currentPage.allUsers);
+                } else {
+                    const errorText = await response.text();
+                    let errorMsg = 'Failed to activate user';
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMsg = errorJson.message || errorMsg;
+                    } catch (e) {
+                        errorMsg = errorText || errorMsg;
+                    }
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        async function deactivateUser(userId) {
+            if (!confirm('Are you sure you want to deactivate this user?')) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/admin/users/${userId}/deactivate`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    showMessage('User deactivated!', 'success');
+                    loadAllUsers(currentPage.allUsers);
+                } else {
+                    const errorText = await response.text();
+                    let errorMsg = 'Failed to deactivate user';
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMsg = errorJson.message || errorMsg;
+                    } catch (e) {
+                        errorMsg = errorText || errorMsg;
+                    }
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        async function updateUserRole(userId) {
+            const role = prompt('New role (STUDENT, ADMIN):', '');
+            if (!role || role === null) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/admin/users/${userId}/role`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ role: role.toUpperCase() })
+                });
+                
+                if (response.ok) {
+                    showMessage('User role updated!', 'success');
+                    loadAllUsers(currentPage.allUsers);
+                } else {
+                    const errorText = await response.text();
+                    let errorMsg = 'Failed to update role';
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMsg = errorJson.message || errorMsg;
+                    } catch (e) {
+                        errorMsg = errorText || errorMsg;
+                    }
+                    showMessage(errorMsg, 'error');
+                }
+            } catch (error) {
+                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
+                } else {
+                    showMessage('Error: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        async function checkAuth() {
+            try {
+                const response = await fetch(`${API_BASE}/users/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    currentUser = await response.json();
+                    updateUI();
+                    refreshUserInfo();
+                    // loadActiveOffers is called in updateUI()
+                } else {
+                    logout();
+                }
+            } catch (error) {
+                logout();
+            }
+        }
+        
+        async function refreshUserInfo() {
+            try {
+                const response = await fetch(`${API_BASE}/users/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    currentUser = await response.json();
+                    const userInfo = document.getElementById('userInfo');
+                    
+                    const walletInfo = currentUser.wallet ? 
+                        `<p><strong>Balance:</strong> ${currentUser.wallet.balance} hours</p>
+                         <p><strong>Total Earned:</strong> ${currentUser.wallet.totalEarned} hours</p>
+                         <p><strong>Total Spent:</strong> ${currentUser.wallet.totalSpent} hours</p>` :
+                        '<p>No wallet yet</p>';
+                    
+                    userInfo.innerHTML = `
+                        <h3>${currentUser.firstName} ${currentUser.lastName}</h3>
+                        <p><strong>Email:</strong> ${currentUser.email}</p>
+                        <p><strong>Role:</strong> ${currentUser.role}</p>
+                        <p><strong>Faculty:</strong> ${currentUser.faculty || 'N/A'}</p>
+                        <p><strong>Student ID:</strong> ${currentUser.studentId || 'N/A'}</p>
+                        <p><strong>Status:</strong> ${currentUser.active ? 'Active' : 'Inactive'}</p>
+                        <h4>Wallet</h4>
+                        ${walletInfo}
+                    `;
+                }
+            } catch (error) {
+                showMessage('Error loading user info: ' + error.message, 'error');
+            }
+        }
+        
+        function updateUI() {
+            if (token && currentUser) {
+                document.getElementById('authSection').classList.add('hidden');
+                document.getElementById('userSection').classList.remove('hidden');
+                document.getElementById('offersSection').classList.remove('hidden');
+                document.getElementById('bookingsSection').classList.remove('hidden');
+                
+                if (currentUser.role === 'ADMIN') {
+                    document.getElementById('adminSection').classList.remove('hidden');
+                } else {
+                    document.getElementById('adminSection').classList.add('hidden');
+                }
+                
+                loadMyOffers();
+                loadMyBookingsAsRequester();
+                loadMyBookingsAsOwner();
+                
+                if (currentUser.role === 'ADMIN') {
+                    loadAllUsers();
+                    loadAllTransactions();
+                }
+            } else {
+                document.getElementById('authSection').classList.remove('hidden');
+                document.getElementById('userSection').classList.add('hidden');
+                document.getElementById('offersSection').classList.add('hidden');
+                document.getElementById('bookingsSection').classList.add('hidden');
+                document.getElementById('adminSection').classList.add('hidden');
+            }
+        }
+        
+        function logout() {
+            token = null;
+            currentUser = null;
+            localStorage.removeItem('token');
+            updateUI();
+            showMessage('Logged out', 'success');
+        }
+        
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('messageDiv');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            messageDiv.classList.remove('hidden');
+            
+            // Show error messages longer than success messages
+            const timeout = type === 'error' ? 10000 : 5000;
+            setTimeout(() => {
+                messageDiv.classList.add('hidden');
+            }, timeout);
+        }
+    </script>
+</body>
+</html>
+

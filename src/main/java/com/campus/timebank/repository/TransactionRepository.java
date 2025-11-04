@@ -34,4 +34,13 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     
     @Query("SELECT SUM(t.amount) FROM Transaction t WHERE t.user.id = :userId AND t.type = 'RESERVE'")
     java.math.BigDecimal getTotalSpent(@Param("userId") Long userId);
+    
+    Page<Transaction> findByType(Transaction.TransactionType type, Pageable pageable);
+    
+    @Query("SELECT t FROM Transaction t WHERE t.createdAt BETWEEN :startDate AND :endDate ORDER BY t.createdAt DESC")
+    Page<Transaction> findByDateRange(
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate,
+        Pageable pageable
+    );
 }

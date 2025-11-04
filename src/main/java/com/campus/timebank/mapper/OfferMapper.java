@@ -10,8 +10,8 @@ import org.mapstruct.Mapping;
 public interface OfferMapper {
     
     @Mapping(target = "ownerId", source = "owner.id")
-    @Mapping(target = "ownerName", expression = "java(offer.getOwner().getFirstName() + \" \" + offer.getOwner().getLastName())")
-    @Mapping(target = "bookingCount", expression = "java(offer.getBookings().size())")
+    @Mapping(target = "ownerName", expression = "java(offer.getOwner() != null ? offer.getOwner().getFirstName() + \" \" + offer.getOwner().getLastName() : \"Unknown\")")
+    @Mapping(target = "bookingCount", expression = "java(offer.getBookings() != null ? offer.getBookings().size() : 0)")
     OfferDto toDto(Offer offer);
     
     @Mapping(target = "id", ignore = true)
