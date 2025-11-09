@@ -5,365 +5,654 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus TimeBank</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --gray-light: #e5e7eb;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
+            line-height: 1.6;
+            color: var(--dark);
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-xl);
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         h1 {
-            color: #333;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
         }
         
         h2 {
-            color: #555;
-            margin-top: 30px;
+            color: var(--dark);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+            display: inline-block;
+            width: 100%;
+        }
+        
+        h3 {
+            color: var(--dark);
+            font-size: 1.5rem;
+            font-weight: 600;
             margin-bottom: 15px;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 5px;
+        }
+        
+        h4 {
+            color: var(--dark);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
         
         .section {
-            margin-bottom: 30px;
-            padding: 15px;
-            background: #fafafa;
-            border-radius: 5px;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-light);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        
+        .section:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+        
+        .section h3 {
+            margin-top: 0;
+            color: var(--primary);
         }
         
         form {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
         }
         
         input, textarea, select {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-family: inherit;
+            transition: var(--transition);
+            background: var(--white);
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
         
         textarea {
-            height: 80px;
+            height: 100px;
             resize: vertical;
+            font-family: inherit;
         }
         
         button {
-            background: #007bff;
-            color: white;
-            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 12px 24px;
             border: none;
-            border-radius: 4px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 600;
             margin-right: 10px;
             margin-top: 5px;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        button:hover::before {
+            width: 300px;
+            height: 300px;
         }
         
         button:hover {
-            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        button:active {
+            transform: translateY(0);
         }
         
         button.secondary {
-            background: #6c757d;
-        }
-        
-        button.secondary:hover {
-            background: #545b62;
+            background: linear-gradient(135deg, var(--gray) 0%, #4b5563 100%);
         }
         
         button.danger {
-            background: #dc3545;
-        }
-        
-        button.danger:hover {
-            background: #c82333;
+            background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
         }
         
         button.success {
-            background: #28a745;
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
         }
         
-        button.success:hover {
-            background: #218838;
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
         }
         
         .message {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: var(--radius-sm);
             white-space: pre-line;
             word-wrap: break-word;
+            font-weight: 500;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: var(--shadow);
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
         
         .message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+            border-left: 4px solid var(--success);
         }
         
         .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+            border-left: 4px solid var(--danger);
         }
         
         .hidden {
-            display: none;
+            display: none !important;
+        }
+        
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+            position: relative;
+        }
+        
+        .loading::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            margin: -20px 0 0 -20px;
+            border: 4px solid var(--primary-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            z-index: 1000;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
         .user-info {
-            background: #e7f3ff;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            padding: 25px;
+            border-radius: var(--radius);
+            margin-bottom: 25px;
+            border: 2px solid var(--primary-light);
+            box-shadow: var(--shadow);
         }
         
         .user-info h3 {
-            margin-bottom: 10px;
-            color: #004085;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 30px;
+            color: var(--gray);
+            font-style: italic;
+            font-size: 1.1rem;
         }
         
         .item-list {
             display: grid;
-            gap: 15px;
-            margin-top: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
         
         .item-card {
-            background: white;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            background: var(--white);
+            padding: 24px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .item-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            transform: scaleY(0);
+            transition: var(--transition);
+        }
+        
+        .item-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+        
+        .item-card:hover::before {
+            transform: scaleY(1);
         }
         
         .item-card h4 {
-            margin-bottom: 10px;
-            color: #333;
+            margin-bottom: 12px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .item-card p {
-            margin: 5px 0;
-            color: #666;
+            margin: 8px 0;
+            color: var(--gray);
             font-size: 14px;
+            line-height: 1.6;
         }
         
         .item-card .actions {
-            margin-top: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--gray-light);
         }
         
         .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 3px;
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
             font-size: 12px;
-            font-weight: bold;
+            font-weight: 600;
             margin-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow);
         }
         
         .badge.active {
-            background: #28a745;
-            color: white;
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: var(--white);
         }
         
         .badge.inactive {
-            background: #6c757d;
-            color: white;
+            background: linear-gradient(135deg, var(--gray) 0%, #4b5563 100%);
+            color: var(--white);
         }
         
         .badge.pending {
-            background: #ffc107;
-            color: #000;
+            background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
+            color: var(--white);
         }
         
         .badge.confirmed {
-            background: #17a2b8;
-            color: white;
+            background: linear-gradient(135deg, var(--info) 0%, #2563eb 100%);
+            color: var(--white);
         }
         
         .badge.completed {
-            background: #28a745;
-            color: white;
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: var(--white);
         }
         
         .badge.cancelled {
-            background: #dc3545;
-            color: white;
+            background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+            color: var(--white);
         }
         
         .pagination {
-            margin-top: 15px;
+            margin-top: 20px;
             display: flex;
             gap: 10px;
             align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
         }
         
         .pagination button {
             margin: 0;
+            min-width: 100px;
+        }
+        
+        .pagination span {
+            padding: 0 15px;
+            font-weight: 600;
+            color: var(--gray);
         }
         
         .admin-section {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid var(--warning);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .admin-section h2 {
+            border-bottom-color: var(--warning);
+        }
+        
+        #connectionStatus {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid var(--warning);
+        }
+        
+        code {
+            background: var(--gray-light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: var(--primary-dark);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .item-list {
+                grid-template-columns: 1fr;
+            }
+            
+            button {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--light);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🏦 Campus TimeBank</h1>
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h1>🏦 Campus TimeBank</h1>
+            <p style="color: var(--gray); font-size: 1.1rem; margin-top: 10px;">Time-based skill exchange platform</p>
+        </div>
         
         <!-- Connection Status -->
-        <div class="section" id="connectionStatus" style="background: #fff3cd; border: 2px solid #ffc107;">
+        <div class="section" id="connectionStatus">
             <h3>🔌 Connection Status</h3>
-            <p id="statusText">Checking connection...</p>
-            <button onclick="checkConnection()">Check Connection</button>
-            <p style="font-size: 12px; margin-top: 10px; color: #666;">
-                <strong>📋 Setup Instructions:</strong><br>
-                1. Start backend: <code style="background: #f0f0f0; padding: 1px 3px;">./start.sh</code><br>
-                2. Start HTTP server: <code style="background: #f0f0f0; padding: 1px 3px;">python3 -m http.server 8000</code><br>
-                3. Open: <code style="background: #f0f0f0; padding: 1px 3px;">http://localhost:8000/index.html</code><br>
-                <strong>⚠️ Don't open index.html directly - use HTTP server!</strong>
-            </p>
+            <p id="statusText" style="margin-bottom: 15px; font-size: 1.1rem;">⏳ Checking connection...</p>
+            <button onclick="checkConnection()">🔄 Check Connection</button>
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255, 255, 255, 0.7); border-radius: var(--radius-sm);">
+                <strong style="color: var(--dark);">📋 Setup Instructions:</strong><br>
+                <ol style="margin-top: 10px; padding-left: 20px; color: var(--gray);">
+                    <li style="margin-bottom: 8px;">Start backend: <code>./start.sh</code> or <code>start-app.bat</code></li>
+                    <li style="margin-bottom: 8px;">Start HTTP server: <code>python3 -m http.server 8000</code></li>
+                    <li style="margin-bottom: 8px;">Open: <code>http://localhost:8000/index.html</code></li>
+                </ol>
+                <p style="margin-top: 10px; color: var(--warning); font-weight: 600;">⚠️ Don't open index.html directly - use HTTP server!</p>
+            </div>
         </div>
         
         <!-- Auth Section -->
         <div class="section" id="authSection">
-            <h2>Authentication</h2>
+            <h2>🔐 Authentication</h2>
             <div id="authMessage"></div>
             
-            <h3>Register</h3>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label>Email:</label>
-                    <input type="email" id="registerEmail" required>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; margin-top: 30px;">
+                <div>
+                    <h3>📝 Register</h3>
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label>✉️ Email:</label>
+                            <input type="email" id="registerEmail" placeholder="your.email@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>🔒 Password:</label>
+                            <input type="password" id="registerPassword" placeholder="Minimum 6 characters" required>
+                        </div>
+                        <div class="form-group">
+                            <label>👤 First Name:</label>
+                            <input type="text" id="registerFirstName" placeholder="John" required>
+                        </div>
+                        <div class="form-group">
+                            <label>👤 Last Name:</label>
+                            <input type="text" id="registerLastName" placeholder="Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label>🏫 Faculty (optional):</label>
+                            <input type="text" id="registerFaculty" placeholder="Computer Science">
+                        </div>
+                        <div class="form-group">
+                            <label>🎓 Student ID (optional):</label>
+                            <input type="text" id="registerStudentId" placeholder="DE123456">
+                        </div>
+                        <button type="submit">✅ Register</button>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label>Password:</label>
-                    <input type="password" id="registerPassword" required>
+                
+                <div>
+                    <h3>🚪 Login</h3>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label>✉️ Email:</label>
+                            <input type="email" id="loginEmail" placeholder="your.email@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>🔒 Password:</label>
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit">🚀 Login</button>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label>First Name:</label>
-                    <input type="text" id="registerFirstName" required>
-                </div>
-                <div class="form-group">
-                    <label>Last Name:</label>
-                    <input type="text" id="registerLastName" required>
-                </div>
-                <div class="form-group">
-                    <label>Faculty (optional):</label>
-                    <input type="text" id="registerFaculty">
-                </div>
-                <div class="form-group">
-                    <label>Student ID (optional):</label>
-                    <input type="text" id="registerStudentId">
-                </div>
-                <button type="submit">Register</button>
-            </form>
-            
-            <h3>Login</h3>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label>Email:</label>
-                    <input type="email" id="loginEmail" required>
-                </div>
-                <div class="form-group">
-                    <label>Password:</label>
-                    <input type="password" id="loginPassword" required>
-                </div>
-                <button type="submit">Login</button>
-            </form>
+            </div>
         </div>
         
         <!-- User Info Section -->
         <div class="section hidden" id="userSection">
-            <h2>My Profile</h2>
+            <h2>👤 My Profile</h2>
             <div id="userInfo" class="user-info"></div>
-            <button onclick="refreshUserInfo()">Refresh Profile</button>
-            <button class="secondary" onclick="logout()">Logout</button>
+            <div style="margin-top: 20px;">
+                <button onclick="refreshUserInfo()">🔄 Refresh Profile</button>
+                <button class="secondary" onclick="logout()">🚪 Logout</button>
+            </div>
         </div>
         
         <!-- Offers Section -->
         <div class="section hidden" id="offersSection">
-            <h2>Offers</h2>
+            <h2>💼 Offers</h2>
             
-            <h3>Create Offer</h3>
-            <form id="createOfferForm">
+            <h3>➕ Create Offer</h3>
+            <form id="createOfferForm" style="max-width: 600px;">
                 <div class="form-group">
-                    <label>Title:</label>
-                    <input type="text" id="offerTitle" required>
+                    <label>📌 Title:</label>
+                    <input type="text" id="offerTitle" placeholder="e.g., Math Tutoring" required>
                 </div>
                 <div class="form-group">
-                    <label>Description:</label>
-                    <textarea id="offerDescription" required></textarea>
+                    <label>📝 Description:</label>
+                    <textarea id="offerDescription" placeholder="Describe your service..." required></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Hours Rate:</label>
-                    <input type="number" step="0.1" id="offerHoursRate" required>
+                    <label>⏱️ Hours Rate:</label>
+                    <input type="number" step="0.1" id="offerHoursRate" placeholder="e.g., 2.5" required>
                 </div>
-                <button type="submit">Create Offer</button>
+                <button type="submit">✨ Create Offer</button>
             </form>
             
-            <h3>All Active Offers</h3>
-            <button onclick="loadActiveOffers()">Refresh</button>
-            <button onclick="loadActiveOffers(0)" style="background: #28a745;">Load First Page</button>
+            <h3>🌟 All Active Offers</h3>
+            <div style="margin-bottom: 15px;">
+                <button onclick="loadActiveOffers()">🔄 Refresh</button>
+                <button class="success" onclick="loadActiveOffers(0)">📄 Load First Page</button>
+            </div>
             <div id="activeOffersList" class="item-list"></div>
             <div id="activeOffersPagination" class="pagination"></div>
             
-            <h3>My Offers</h3>
-            <button onclick="loadMyOffers()">Refresh</button>
+            <h3>📋 My Offers</h3>
+            <button onclick="loadMyOffers()">🔄 Refresh</button>
             <div id="myOffersList" class="item-list"></div>
         </div>
         
         <!-- Bookings Section -->
         <div class="section hidden" id="bookingsSection">
-            <h2>Bookings</h2>
+            <h2>📅 Bookings</h2>
             
-            <h3>Create Booking</h3>
-            <form id="createBookingForm">
+            <h3>➕ Create Booking</h3>
+            <form id="createBookingForm" style="max-width: 600px;">
                 <div class="form-group">
-                    <label>Offer ID:</label>
-                    <input type="number" id="bookingOfferId" required>
+                    <label>🔢 Offer ID:</label>
+                    <input type="number" id="bookingOfferId" placeholder="Enter offer ID" required>
                 </div>
                 <div class="form-group">
-                    <label>Hours:</label>
-                    <input type="number" step="0.1" id="bookingHours" required>
+                    <label>⏱️ Hours:</label>
+                    <input type="number" step="0.1" id="bookingHours" placeholder="e.g., 2.0" required>
                 </div>
-                <button type="submit">Create Booking</button>
+                <button type="submit">✨ Create Booking</button>
             </form>
             
-            <h3>My Bookings as Requester</h3>
-            <button onclick="loadMyBookingsAsRequester()">Refresh</button>
+            <h3>📥 My Bookings as Requester</h3>
+            <button onclick="loadMyBookingsAsRequester()">🔄 Refresh</button>
             <div id="myBookingsRequesterList" class="item-list"></div>
             <div id="myBookingsRequesterPagination" class="pagination"></div>
             
-            <h3>My Bookings as Owner</h3>
-            <button onclick="loadMyBookingsAsOwner()">Refresh</button>
+            <h3>📤 My Bookings as Owner</h3>
+            <button onclick="loadMyBookingsAsOwner()">🔄 Refresh</button>
             <div id="myBookingsOwnerList" class="item-list"></div>
             <div id="myBookingsOwnerPagination" class="pagination"></div>
         </div>
@@ -372,38 +661,38 @@
         <div class="section hidden admin-section" id="adminSection">
             <h2>🔐 Admin Panel</h2>
             
-            <h3>Create Admin</h3>
-            <form id="createAdminForm">
+            <h3>➕ Create Admin</h3>
+            <form id="createAdminForm" style="max-width: 600px;">
                 <div class="form-group">
-                    <label>Email:</label>
-                    <input type="email" id="adminEmail" required>
+                    <label>✉️ Email:</label>
+                    <input type="email" id="adminEmail" placeholder="admin@example.com" required>
                 </div>
                 <div class="form-group">
-                    <label>Password:</label>
-                    <input type="password" id="adminPassword" required>
+                    <label>🔒 Password:</label>
+                    <input type="password" id="adminPassword" placeholder="Minimum 6 characters" required>
                 </div>
                 <div class="form-group">
-                    <label>First Name:</label>
-                    <input type="text" id="adminFirstName" required>
+                    <label>👤 First Name:</label>
+                    <input type="text" id="adminFirstName" placeholder="Admin" required>
                 </div>
                 <div class="form-group">
-                    <label>Last Name:</label>
-                    <input type="text" id="adminLastName" required>
+                    <label>👤 Last Name:</label>
+                    <input type="text" id="adminLastName" placeholder="User" required>
                 </div>
                 <div class="form-group">
-                    <label>Faculty:</label>
+                    <label>🏫 Faculty:</label>
                     <input type="text" id="adminFaculty" value="Administration">
                 </div>
-                <button type="submit">Create Admin</button>
+                <button type="submit">✨ Create Admin</button>
             </form>
             
-            <h3>All Users</h3>
-            <button onclick="loadAllUsers()">Refresh</button>
+            <h3>👥 All Users</h3>
+            <button onclick="loadAllUsers()">🔄 Refresh</button>
             <div id="allUsersList" class="item-list"></div>
             <div id="allUsersPagination" class="pagination"></div>
             
-            <h3>All Transactions</h3>
-            <button onclick="loadAllTransactions()">Refresh</button>
+            <h3>💰 All Transactions</h3>
+            <button onclick="loadAllTransactions()">🔄 Refresh</button>
             <div id="allTransactionsList" class="item-list"></div>
             <div id="allTransactionsPagination" class="pagination"></div>
         </div>
@@ -436,29 +725,32 @@
             checkConnection();
         }
         
-        // Check if user is logged in
+        // Check if user is logged in on page load
+        // Wait a bit for DOM to be ready, then check auth
         if (token) {
-            checkAuth();
+            setTimeout(() => {
+                checkAuth();
+            }, 100);
         }
         
         // Check backend connection
         async function checkConnection() {
             const statusText = document.getElementById('statusText');
-            statusText.innerHTML = 'Checking...';
-            statusText.style.color = '#666';
+            statusText.innerHTML = '⏳ Checking connection...';
+            statusText.style.color = 'var(--gray)';
             
             // Check if using HTTP server
             const currentUrl = window.location.href;
             const isHttpServer = currentUrl.startsWith('http://') || currentUrl.startsWith('https://');
             
             if (!isHttpServer) {
-                statusText.innerHTML = '⚠️ <strong>File opened directly!</strong><br><br>' +
+                statusText.innerHTML = '⚠️ <strong style="color: var(--warning);">File opened directly!</strong><br><br>' +
                     'You must use HTTP server for CORS to work:<br><br>' +
                     '<strong>1. Open terminal in project directory</strong><br>' +
-                    '<code style="background: #f0f0f0; padding: 2px 5px; border-radius: 3px;">python3 -m http.server 8000</code><br><br>' +
+                    '<code style="background: var(--gray-light); padding: 4px 8px; border-radius: 4px; color: var(--primary-dark);">python3 -m http.server 8000</code><br><br>' +
                     '<strong>2. Open in browser:</strong><br>' +
-                    '<code style="background: #f0f0f0; padding: 2px 5px; border-radius: 3px;">http://localhost:8000/index.html</code>';
-                statusText.style.color = '#ffc107';
+                    '<code style="background: var(--gray-light); padding: 4px 8px; border-radius: 4px; color: var(--primary-dark);">http://localhost:8000/index.html</code>';
+                statusText.style.color = 'var(--warning)';
                 return;
             }
             
@@ -474,31 +766,80 @@
                 
                 if (healthResponse.ok) {
                     const data = await healthResponse.json();
-                    statusText.innerHTML = '✅ <strong>Backend is running and accessible!</strong>';
-                    statusText.style.color = '#28a745';
+                    statusText.innerHTML = '✅ <strong style="color: var(--success);">Backend is running and accessible!</strong><br><br>🎉 Ready to use!';
+                    statusText.style.color = 'var(--success)';
                     return;
                 } else {
                     statusText.innerHTML = `⚠️ Backend responded with status ${healthResponse.status}`;
-                    statusText.style.color = '#ffc107';
+                    statusText.style.color = 'var(--warning)';
                     return;
                 }
             } catch (error) {
                 console.error('Health check error:', error);
                 
                 // Show detailed error with solution
-                let errorDetails = '❌ <strong>Cannot connect to backend</strong><br><br>';
-                errorDetails += '<strong>Quick Fix:</strong><br>';
+                let errorDetails = '❌ <strong style="color: var(--danger);">Cannot connect to backend</strong><br><br>';
+                errorDetails += '<strong>🔧 Quick Fix:</strong><br>';
                 errorDetails += '1. Make sure backend is running:<br>';
-                errorDetails += '<code style="background: #f0f0f0; padding: 2px 5px; border-radius: 3px;">./start.sh</code><br><br>';
-                errorDetails += '2. Wait 20-30 seconds for backend to start<br><br>';
+                errorDetails += '<code style="background: var(--gray-light); padding: 4px 8px; border-radius: 4px; color: var(--primary-dark);">./start.sh</code> or <code style="background: var(--gray-light); padding: 4px 8px; border-radius: 4px; color: var(--primary-dark);">start-app.bat</code><br><br>';
+                errorDetails += '2. ⏳ Wait 20-30 seconds for backend to start<br><br>';
                 errorDetails += '3. Check backend is accessible:<br>';
-                errorDetails += '<code style="background: #f0f0f0; padding: 2px 5px; border-radius: 3px;">curl http://localhost:8080/actuator/health</code><br><br>';
-                errorDetails += '<strong>Error details:</strong><br>';
-                errorDetails += '<code style="background: #f0f0f0; padding: 2px 5px; border-radius: 3px;">' + (error.message || 'NetworkError when attempting to fetch resource') + '</code>';
+                errorDetails += '<code style="background: var(--gray-light); padding: 4px 8px; border-radius: 4px; color: var(--primary-dark);">curl http://localhost:8080/actuator/health</code><br><br>';
+                errorDetails += '<strong>📋 Error details:</strong><br>';
+                errorDetails += '<code style="background: var(--gray-light); padding: 4px 8px; border-radius: 4px; color: var(--danger);">' + (error.message || 'NetworkError when attempting to fetch resource') + '</code>';
                 
                 statusText.innerHTML = errorDetails;
-                statusText.style.color = '#dc3545';
+                statusText.style.color = 'var(--danger)';
                 console.error('Connection error:', error);
+            }
+        }
+        
+        // Helper function to make API calls with proper error handling
+        async function apiCall(url, options = {}) {
+            // Get fresh token from localStorage in case it was updated
+            const currentToken = localStorage.getItem('token') || token;
+            
+            const defaultOptions = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(currentToken ? { 'Authorization': `Bearer ${currentToken}` } : {})
+                },
+                ...options
+            };
+            
+            // Merge headers properly
+            if (options.headers) {
+                defaultOptions.headers = { ...defaultOptions.headers, ...options.headers };
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}${url}`, defaultOptions);
+                
+                // Update token if it was refreshed
+                if (currentToken !== token) {
+                    token = currentToken;
+                }
+                
+                return response;
+            } catch (error) {
+                console.error('API call error:', error);
+                throw error;
+            }
+        }
+        
+        // Helper function to parse error response
+        async function parseErrorResponse(response) {
+            try {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const error = await response.json();
+                    return error.message || error.error || JSON.stringify(error);
+                } else {
+                    const text = await response.text();
+                    return text || `Error ${response.status}: ${response.statusText}`;
+                }
+            } catch (e) {
+                return `Error ${response.status}: ${response.statusText}`;
             }
         }
         
@@ -506,61 +847,60 @@
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Validate required fields
-            const email = document.getElementById('registerEmail').value.trim();
-            const password = document.getElementById('registerPassword').value;
-            const firstName = document.getElementById('registerFirstName').value.trim();
-            const lastName = document.getElementById('registerLastName').value.trim();
-            
-            if (!email || !password || !firstName || !lastName) {
-                showMessage('Please fill in all required fields (Email, Password, First Name, Last Name)', 'error');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showMessage('Password must be at least 6 characters long', 'error');
-                return;
-            }
-            
-            const data = {
-                email: email,
-                password: password,
-                firstName: firstName,
-                lastName: lastName,
-                faculty: document.getElementById('registerFaculty').value.trim() || null,
-                studentId: document.getElementById('registerStudentId').value.trim() || null
-            };
-            
-            showMessage('Registering...', 'success');
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = '⏳ Registering...';
             
             try {
-                const response = await fetch(`${API_BASE}/auth/register`, {
+                // Validate required fields
+                const email = document.getElementById('registerEmail').value.trim();
+                const password = document.getElementById('registerPassword').value;
+                const firstName = document.getElementById('registerFirstName').value.trim();
+                const lastName = document.getElementById('registerLastName').value.trim();
+                
+                if (!email || !password || !firstName || !lastName) {
+                    showMessage('Please fill in all required fields (Email, Password, First Name, Last Name)', 'error');
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                    return;
+                }
+                
+                if (!email.includes('@')) {
+                    showMessage('Please enter a valid email address', 'error');
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    showMessage('Password must be at least 6 characters long', 'error');
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                    return;
+                }
+                
+                const data = {
+                    email: email,
+                    password: password,
+                    firstName: firstName,
+                    lastName: lastName,
+                    faculty: document.getElementById('registerFaculty').value.trim() || null,
+                    studentId: document.getElementById('registerStudentId').value.trim() || null
+                };
+                
+                const response = await apiCall('/auth/register', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 
-                let result;
-                const contentType = response.headers.get('content-type');
-                
-                try {
-                    if (contentType && contentType.includes('application/json')) {
-                        result = await response.json();
-                    } else {
-                        const text = await response.text();
-                        result = { message: text || `Registration failed with status ${response.status}` };
-                    }
-                } catch (parseError) {
-                    const text = await response.text();
-                    result = { message: text || `Registration failed with status ${response.status}` };
-                }
-                
                 if (response.ok) {
+                    const result = await response.json();
                     if (result.token && result.user) {
                         token = result.token;
                         localStorage.setItem('token', token);
                         currentUser = result.user;
-                        showMessage('Registration successful! Welcome!', 'success');
+                        showMessage('🎉 Registration successful! Welcome!', 'success');
                         document.getElementById('registerForm').reset();
                         updateUI();
                         refreshUserInfo();
@@ -569,101 +909,125 @@
                     }
                 } else {
                     // Handle different error statuses
-                    let errorMsg = 'Registration failed';
+                    const errorMsg = await parseErrorResponse(response);
+                    let userFriendlyMsg = errorMsg;
+                    
                     if (response.status === 409) {
-                        errorMsg = 'Email already registered. Please use a different email or try logging in.';
+                        userFriendlyMsg = 'Email already registered. Please use a different email or try logging in.';
                     } else if (response.status === 400) {
-                        errorMsg = result.message || result.error || 'Invalid registration data. Please check your input.';
-                        if (typeof result === 'object' && result !== null) {
-                            // Handle validation errors
-                            const errors = Object.values(result).join(', ');
-                            if (errors) errorMsg = errors;
-                        }
+                        userFriendlyMsg = errorMsg || 'Invalid registration data. Please check your input.';
                     } else if (response.status === 403) {
-                        errorMsg = 'Registration is not allowed. Please contact administrator.';
-                    } else {
-                        errorMsg = result.message || result.error || `Registration failed (HTTP ${response.status})`;
+                        userFriendlyMsg = 'Registration is not allowed. Please contact administrator.';
                     }
-                    showMessage(errorMsg, 'error');
+                    
+                    showMessage(userFriendlyMsg, 'error');
                 }
             } catch (error) {
                 console.error('Registration error:', error);
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                    showMessage('Cannot connect to server. Please make sure:\n1. Backend is running (./start.sh)\n2. Backend is accessible at http://localhost:8080\n3. Check browser console (F12) for details', 'error');
-                } else if (error.message.includes('CORS')) {
-                    showMessage('CORS error: Backend may not be configured correctly. Check server logs.', 'error');
-                } else {
-                    showMessage('Error: ' + error.message, 'error');
-                }
+                handleApiError(error, 'Registration');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
             }
         });
+        
+        // Helper function to handle API errors
+        function handleApiError(error, operation = 'Operation') {
+            if (error.message && (error.message.includes('fetch') || error.message.includes('Failed to fetch') || error.message.includes('NetworkError'))) {
+                showMessage(`Cannot connect to server. Please make sure:\n1. Backend is running (./start.sh)\n2. Backend is accessible at http://localhost:8080\n3. Check browser console (F12) for details`, 'error');
+            } else if (error.message && error.message.includes('CORS')) {
+                showMessage('CORS error: Backend may not be configured correctly. Check server logs.', 'error');
+            } else {
+                showMessage(`${operation} error: ${error.message || 'Unknown error'}`, 'error');
+            }
+        }
         
         // Login form
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const data = {
-                email: document.getElementById('loginEmail').value,
-                password: document.getElementById('loginPassword').value
-            };
+            
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = '⏳ Logging in...';
             
             try {
-                const response = await fetch(`${API_BASE}/auth/login`, {
+                const email = document.getElementById('loginEmail').value.trim();
+                const password = document.getElementById('loginPassword').value;
+                
+                if (!email || !password) {
+                    showMessage('Please enter both email and password', 'error');
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                    return;
+                }
+                
+                const data = {
+                    email: email,
+                    password: password
+                };
+                
+                const response = await apiCall('/auth/login', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 
-                let result;
-                const contentType = response.headers.get('content-type');
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
-                } else {
-                    const text = await response.text();
-                    throw new Error(text || `Login failed with status ${response.status}`);
-                }
-                
                 if (response.ok) {
+                    const result = await response.json();
                     token = result.token;
                     localStorage.setItem('token', token);
                     currentUser = result.user;
-                    showMessage('Login successful!', 'success');
+                    showMessage('🎉 Login successful! Welcome back!', 'success');
+                    document.getElementById('loginForm').reset();
                     updateUI();
                     refreshUserInfo();
                 } else {
-                    const errorMsg = result.message || result.error || `Login failed (${response.status})`;
-                    showMessage(errorMsg, 'error');
+                    const errorMsg = await parseErrorResponse(response);
+                    showMessage(errorMsg || 'Login failed. Please check your credentials.', 'error');
                 }
             } catch (error) {
-                if (error.message.includes('fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error: ' + error.message, 'error');
-                }
+                handleApiError(error, 'Login');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
             }
         });
         
         // Create offer form
         document.getElementById('createOfferForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const data = {
-                title: document.getElementById('offerTitle').value,
-                description: document.getElementById('offerDescription').value,
-                hoursRate: parseFloat(document.getElementById('offerHoursRate').value)
-            };
+            
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = '⏳ Creating...';
             
             try {
-                const response = await fetch(`${API_BASE}/offers`, {
+                const title = document.getElementById('offerTitle').value.trim();
+                const description = document.getElementById('offerDescription').value.trim();
+                const hoursRate = parseFloat(document.getElementById('offerHoursRate').value);
+                
+                if (!title || !description || !hoursRate || hoursRate <= 0) {
+                    showMessage('Please fill in all fields. Hours rate must be greater than 0.', 'error');
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                    return;
+                }
+                
+                const data = {
+                    title: title,
+                    description: description,
+                    hoursRate: hoursRate
+                };
+                
+                const response = await apiCall('/offers', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
                     body: JSON.stringify(data)
                 });
                 
                 if (response.ok) {
                     const result = await response.json();
-                    showMessage('Offer created successfully!', 'success');
+                    showMessage('✨ Offer created successfully!', 'success');
                     document.getElementById('createOfferForm').reset();
                     // Reload offers after a short delay to ensure backend processed it
                     setTimeout(() => {
@@ -671,44 +1035,50 @@
                         loadMyOffers();
                     }, 500);
                 } else {
-                    let result;
-                    const contentType = response.headers.get('content-type');
-                    if (contentType && contentType.includes('application/json')) {
-                        result = await response.json();
-                    }
-                    const errorMsg = result?.message || result?.error || `Failed to create offer (${response.status})`;
-                    showMessage(errorMsg, 'error');
+                    const errorMsg = await parseErrorResponse(response);
+                    showMessage(errorMsg || 'Failed to create offer', 'error');
                 }
             } catch (error) {
-                if (error.message.includes('fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error: ' + error.message, 'error');
-                }
+                handleApiError(error, 'Create offer');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
             }
         });
         
         // Create booking form
         document.getElementById('createBookingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const data = {
-                offerId: parseInt(document.getElementById('bookingOfferId').value),
-                hours: parseFloat(document.getElementById('bookingHours').value)
-            };
+            
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = '⏳ Creating...';
             
             try {
-                const response = await fetch(`${API_BASE}/bookings`, {
+                const offerId = parseInt(document.getElementById('bookingOfferId').value);
+                const hours = parseFloat(document.getElementById('bookingHours').value);
+                
+                if (!offerId || offerId <= 0 || !hours || hours <= 0) {
+                    showMessage('Please enter a valid offer ID and hours (both must be greater than 0)', 'error');
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                    return;
+                }
+                
+                const data = {
+                    offerId: offerId,
+                    hours: hours
+                };
+                
+                const response = await apiCall('/bookings', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
                     body: JSON.stringify(data)
                 });
                 
                 if (response.ok) {
                     const result = await response.json();
-                    showMessage('Booking created successfully!', 'success');
+                    showMessage('✨ Booking created successfully!', 'success');
                     document.getElementById('createBookingForm').reset();
                     // Reload bookings after a short delay
                     setTimeout(() => {
@@ -717,38 +1087,57 @@
                         refreshUserInfo();
                     }, 500);
                 } else {
-                    let result;
-                    const contentType = response.headers.get('content-type');
-                    if (contentType && contentType.includes('application/json')) {
-                        result = await response.json();
-                    }
-                    const errorMsg = result?.message || result?.error || `Failed to create booking (${response.status})`;
-                    showMessage(errorMsg, 'error');
+                    const errorMsg = await parseErrorResponse(response);
+                    showMessage(errorMsg || 'Failed to create booking', 'error');
                 }
             } catch (error) {
-                if (error.message.includes('fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error: ' + error.message, 'error');
-                }
+                handleApiError(error, 'Create booking');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
             }
         });
         
         // Create admin form
         document.getElementById('createAdminForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const data = {
-                email: document.getElementById('adminEmail').value,
-                password: document.getElementById('adminPassword').value,
-                firstName: document.getElementById('adminFirstName').value,
-                lastName: document.getElementById('adminLastName').value,
-                faculty: document.getElementById('adminFaculty').value
-            };
+            
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = '⏳ Creating...';
             
             try {
-                const response = await fetch(`${API_BASE}/admin/create-admin`, {
+                const email = document.getElementById('adminEmail').value.trim();
+                const password = document.getElementById('adminPassword').value;
+                const firstName = document.getElementById('adminFirstName').value.trim();
+                const lastName = document.getElementById('adminLastName').value.trim();
+                const faculty = document.getElementById('adminFaculty').value.trim();
+                
+                if (!email || !password || !firstName || !lastName) {
+                    showMessage('Please fill in all required fields', 'error');
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    showMessage('Password must be at least 6 characters long', 'error');
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                    return;
+                }
+                
+                const data = {
+                    email: email,
+                    password: password,
+                    firstName: firstName,
+                    lastName: lastName,
+                    faculty: faculty || 'Administration'
+                };
+                
+                const response = await apiCall('/admin/create-admin', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 
@@ -757,41 +1146,35 @@
                     token = result.token;
                     localStorage.setItem('token', token);
                     currentUser = result.user;
-                    showMessage('Admin created successfully!', 'success');
+                    showMessage('✨ Admin created successfully!', 'success');
+                    document.getElementById('createAdminForm').reset();
                     updateUI();
                     refreshUserInfo();
                 } else {
-                    const result = await response.json();
-                    showMessage(result.message || 'Failed to create admin', 'error');
+                    const errorMsg = await parseErrorResponse(response);
+                    showMessage(errorMsg || 'Failed to create admin', 'error');
                 }
             } catch (error) {
-                showMessage('Error: ' + error.message, 'error');
+                handleApiError(error, 'Create admin');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
             }
         });
         
         // Load functions
         async function loadActiveOffers(page = 0) {
+            const container = document.getElementById('activeOffersList');
+            container.innerHTML = '<p class="empty-state">⏳ Loading offers...</p>';
+            
             try {
-                const response = await fetch(`${API_BASE}/offers/active/list?page=${page}&size=10`, {
-                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                const response = await apiCall(`/offers/active/list?page=${page}&size=10`, {
+                    method: 'GET',
+                    headers: token ? {} : {} // Token is already in apiCall
                 });
                 
                 if (response.ok) {
-                    const text = await response.text();
-                    if (!text || text.trim() === '') {
-                        document.getElementById('activeOffersList').innerHTML = '<p>No active offers found. Create an offer to see it here!</p>';
-                        document.getElementById('activeOffersPagination').innerHTML = '';
-                        return;
-                    }
-                    
-                    let result;
-                    try {
-                        result = JSON.parse(text);
-                    } catch (parseError) {
-                        console.error('Failed to parse offers response:', parseError, 'Response:', text);
-                        document.getElementById('activeOffersList').innerHTML = '<p>Error parsing offers response</p>';
-                        return;
-                    }
+                    const result = await response.json();
                     
                     if (result && result.content && result.content.length > 0) {
                         displayOffers(result.content, 'activeOffersList');
@@ -802,34 +1185,28 @@
                         displayOffers(result, 'activeOffersList');
                         document.getElementById('activeOffersPagination').innerHTML = '';
                         currentPage.activeOffers = page;
-                    } else if (result && result.totalElements !== undefined && result.totalElements === 0) {
-                        document.getElementById('activeOffersList').innerHTML = '<p>No active offers found. Create an offer to see it here!</p>';
-                        document.getElementById('activeOffersPagination').innerHTML = '';
-                        currentPage.activeOffers = page;
                     } else {
-                        document.getElementById('activeOffersList').innerHTML = '<p>No active offers found. Create an offer to see it here!</p>';
+                        container.innerHTML = '<p class="empty-state">📭 No active offers found. Create an offer to see it here! 🚀</p>';
                         document.getElementById('activeOffersPagination').innerHTML = '';
                         currentPage.activeOffers = page;
                     }
                 } else {
-                    const errorText = await response.text();
-                    console.error('Failed to load offers:', response.status, errorText);
-                    document.getElementById('activeOffersList').innerHTML = `<p>Failed to load offers (${response.status})</p>`;
+                    const errorMsg = await parseErrorResponse(response);
+                    container.innerHTML = `<p class="empty-state">❌ Failed to load offers: ${errorMsg}</p>`;
                 }
             } catch (error) {
                 console.error('Error loading offers:', error);
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    document.getElementById('activeOffersList').innerHTML = '<p>Cannot connect to server. Make sure backend is running.</p>';
-                } else {
-                    document.getElementById('activeOffersList').innerHTML = `<p>Error: ${error.message}</p>`;
-                }
+                container.innerHTML = '<p class="empty-state">❌ Cannot connect to server. Make sure backend is running.</p>';
             }
         }
         
         async function loadMyOffers() {
+            const container = document.getElementById('myOffersList');
+            container.innerHTML = '<p class="empty-state">⏳ Loading your offers...</p>';
+            
             try {
-                const response = await fetch(`${API_BASE}/offers/my-offers`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await apiCall('/offers/my-offers', {
+                    method: 'GET'
                 });
                 
                 if (response.ok) {
@@ -837,18 +1214,19 @@
                     if (offers && offers.length > 0) {
                         displayMyOffers(offers);
                     } else {
-                        document.getElementById('myOffersList').innerHTML = '<p>You have no offers yet</p>';
+                        container.innerHTML = '<p class="empty-state">📭 You have no offers yet. Create one to get started! 🚀</p>';
                     }
                 } else {
-                    const errorText = await response.text();
-                    showMessage(`Failed to load my offers: ${response.status}`, 'error');
+                    if (response.status === 401 || response.status === 403) {
+                        container.innerHTML = '<p class="empty-state">🔐 Please log in to view your offers</p>';
+                    } else {
+                        const errorMsg = await parseErrorResponse(response);
+                        container.innerHTML = `<p class="empty-state">❌ Failed to load offers: ${errorMsg}</p>`;
+                    }
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error loading my offers: ' + error.message, 'error');
-                }
+                console.error('Error loading my offers:', error);
+                container.innerHTML = '<p class="empty-state">❌ Cannot connect to server. Make sure backend is running.</p>';
             }
         }
         
@@ -857,7 +1235,7 @@
             container.innerHTML = '';
             
             if (!offers || offers.length === 0) {
-                container.innerHTML = '<p>No offers found</p>';
+                container.innerHTML = '<p class="empty-state">📭 No offers found</p>';
                 return;
             }
             
@@ -870,12 +1248,12 @@
                 const active = offer.active !== undefined ? offer.active : (offer.status === 'ACTIVE');
                 const bookingCount = offer.bookingCount !== undefined ? offer.bookingCount : 0;
                 card.innerHTML = `
-                    <h4>${escapeHtml(offer.title)} <span class="badge ${active ? 'active' : 'inactive'}">${active ? 'ACTIVE' : 'INACTIVE'}</span></h4>
-                    <p><strong>ID:</strong> ${offer.id} <span style="color: #666; font-size: 12px;">(use this ID to create a booking)</span></p>
-                    <p><strong>Description:</strong> ${escapeHtml(offer.description || '')}</p>
-                    <p><strong>Hours Rate:</strong> ${offer.hoursRate} hours</p>
-                    <p><strong>Owner:</strong> ${escapeHtml(ownerName)}${ownerEmail ? ` (${escapeHtml(ownerEmail)})` : ''}</p>
-                    <p><strong>Bookings:</strong> ${bookingCount}</p>
+                    <h4>💼 ${escapeHtml(offer.title)} <span class="badge ${active ? 'active' : 'inactive'}">${active ? 'ACTIVE' : 'INACTIVE'}</span></h4>
+                    <p><strong>🔢 ID:</strong> ${offer.id} <span style="color: var(--gray); font-size: 12px;">(use this ID to create a booking)</span></p>
+                    <p><strong>📝 Description:</strong> ${escapeHtml(offer.description || '')}</p>
+                    <p><strong>⏱️ Hours Rate:</strong> ${offer.hoursRate} hours</p>
+                    <p><strong>👤 Owner:</strong> ${escapeHtml(ownerName)}${ownerEmail ? ` (${escapeHtml(ownerEmail)})` : ''}</p>
+                    <p><strong>📊 Bookings:</strong> ${bookingCount}</p>
                 `;
                 container.appendChild(card);
             });
@@ -886,7 +1264,7 @@
             container.innerHTML = '';
             
             if (!offers || offers.length === 0) {
-                container.innerHTML = '<p>You have no offers yet</p>';
+                container.innerHTML = '<p class="empty-state">You have no offers yet. Create one to get started! 🚀</p>';
                 return;
             }
             
@@ -895,15 +1273,15 @@
                 card.className = 'item-card';
                 const active = offer.active !== undefined ? offer.active : (offer.status === 'ACTIVE');
                 card.innerHTML = `
-                    <h4>${escapeHtml(offer.title)} <span class="badge ${active ? 'active' : 'inactive'}">${active ? 'ACTIVE' : 'INACTIVE'}</span></h4>
-                    <p><strong>ID:</strong> ${offer.id}</p>
-                    <p><strong>Description:</strong> ${escapeHtml(offer.description || '')}</p>
-                    <p><strong>Hours Rate:</strong> ${offer.hoursRate}</p>
+                    <h4>💼 ${escapeHtml(offer.title)} <span class="badge ${active ? 'active' : 'inactive'}">${active ? 'ACTIVE' : 'INACTIVE'}</span></h4>
+                    <p><strong>🔢 ID:</strong> ${offer.id}</p>
+                    <p><strong>📝 Description:</strong> ${escapeHtml(offer.description || '')}</p>
+                    <p><strong>⏱️ Hours Rate:</strong> ${offer.hoursRate} hours</p>
                     <div class="actions">
-                        <button onclick="updateOffer(${offer.id})">Edit</button>
+                        <button onclick="updateOffer(${offer.id})">✏️ Edit</button>
                         ${active ? 
-                            `<button class="secondary" onclick="deactivateOffer(${offer.id})">Deactivate</button>` :
-                            `<button class="success" onclick="activateOffer(${offer.id})">Activate</button>`
+                            `<button class="secondary" onclick="deactivateOffer(${offer.id})">⏸️ Deactivate</button>` :
+                            `<button class="success" onclick="activateOffer(${offer.id})">▶️ Activate</button>`
                         }
                     </div>
                 `;
@@ -919,9 +1297,12 @@
         }
         
         async function loadMyBookingsAsRequester(page = 0) {
+            const container = document.getElementById('myBookingsRequesterList');
+            container.innerHTML = '<p class="empty-state">Loading bookings...</p>';
+            
             try {
-                const response = await fetch(`${API_BASE}/bookings/my/as-requester?page=${page}&size=10`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await apiCall(`/bookings/my/as-requester?page=${page}&size=10`, {
+                    method: 'GET'
                 });
                 
                 if (response.ok) {
@@ -930,26 +1311,30 @@
                         displayBookings(result.content, 'myBookingsRequesterList', true);
                         displayPagination(result, 'myBookingsRequesterPagination', page, loadMyBookingsAsRequester);
                     } else {
-                        document.getElementById('myBookingsRequesterList').innerHTML = '<p>No bookings found</p>';
+                        container.innerHTML = '<p class="empty-state">📭 No bookings found. Create a booking to see it here! 🚀</p>';
                     }
                     currentPage.myBookingsRequester = page;
                 } else {
-                    const errorText = await response.text();
-                    showMessage(`Failed to load bookings: ${response.status}`, 'error');
+                    if (response.status === 401 || response.status === 403) {
+                        container.innerHTML = '<p class="empty-state">🔐 Please log in to view your bookings</p>';
+                    } else {
+                        const errorMsg = await parseErrorResponse(response);
+                        container.innerHTML = `<p class="empty-state">❌ Failed to load bookings: ${errorMsg}</p>`;
+                    }
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error loading bookings: ' + error.message, 'error');
-                }
+                console.error('Error loading bookings:', error);
+                container.innerHTML = '<p class="empty-state">❌ Cannot connect to server. Make sure backend is running.</p>';
             }
         }
         
         async function loadMyBookingsAsOwner(page = 0) {
+            const container = document.getElementById('myBookingsOwnerList');
+            container.innerHTML = '<p class="empty-state">⏳ Loading bookings...</p>';
+            
             try {
-                const response = await fetch(`${API_BASE}/bookings/my/as-owner?page=${page}&size=10`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await apiCall(`/bookings/my/as-owner?page=${page}&size=10`, {
+                    method: 'GET'
                 });
                 
                 if (response.ok) {
@@ -958,19 +1343,20 @@
                         displayBookings(result.content, 'myBookingsOwnerList', false);
                         displayPagination(result, 'myBookingsOwnerPagination', page, loadMyBookingsAsOwner);
                     } else {
-                        document.getElementById('myBookingsOwnerList').innerHTML = '<p>No bookings found</p>';
+                        container.innerHTML = '<p class="empty-state">📭 No bookings found for your offers.</p>';
                     }
                     currentPage.myBookingsOwner = page;
                 } else {
-                    const errorText = await response.text();
-                    showMessage(`Failed to load bookings: ${response.status}`, 'error');
+                    if (response.status === 401 || response.status === 403) {
+                        container.innerHTML = '<p class="empty-state">🔐 Please log in to view your bookings</p>';
+                    } else {
+                        const errorMsg = await parseErrorResponse(response);
+                        container.innerHTML = `<p class="empty-state">❌ Failed to load bookings: ${errorMsg}</p>`;
+                    }
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error loading bookings: ' + error.message, 'error');
-                }
+                console.error('Error loading bookings:', error);
+                container.innerHTML = '<p class="empty-state">❌ Cannot connect to server. Make sure backend is running.</p>';
             }
         }
         
@@ -979,7 +1365,7 @@
             container.innerHTML = '';
             
             if (!bookings || bookings.length === 0) {
-                container.innerHTML = '<p>No bookings found</p>';
+                container.innerHTML = '<p class="empty-state">📭 No bookings found</p>';
                 return;
             }
             
@@ -993,22 +1379,28 @@
                 const requesterName = booking.requesterFirstName && booking.requesterLastName ? 
                     `${booking.requesterFirstName} ${booking.requesterLastName}` : booking.requesterName || 'Unknown';
                 
+                const statusEmoji = {
+                    'PENDING': '⏳',
+                    'CONFIRMED': '✅',
+                    'COMPLETED': '🎉',
+                    'CANCELLED': '❌'
+                };
+                
                 const actions = isRequester ? 
-                    `<button onclick="cancelBooking(${booking.id})">Cancel</button>` :
-                    `<button class="success" onclick="confirmBooking(${booking.id})">Confirm</button>
-                     <button class="success" onclick="completeBooking(${booking.id})">Complete</button>
-                     <button class="danger" onclick="cancelBooking(${booking.id})">Cancel</button>`;
+                    `<button class="danger" onclick="cancelBooking(${booking.id})">❌ Cancel</button>` :
+                    `<button class="success" onclick="confirmBooking(${booking.id})">✅ Confirm</button>
+                     <button class="success" onclick="completeBooking(${booking.id})">🎉 Complete</button>
+                     <button class="danger" onclick="cancelBooking(${booking.id})">❌ Cancel</button>`;
                 
                 card.innerHTML = `
-                    <h4>Booking #${booking.id} <span class="badge ${statusClass}">${escapeHtml(booking.status)}</span></h4>
-                    <p><strong>Offer:</strong> ${escapeHtml(booking.offerTitle || 'N/A')} (ID: ${booking.offerId})</p>
-                    <p><strong>Hours:</strong> ${booking.hours}</p>
-                    <p><strong>Total Cost:</strong> ${booking.totalCost || booking.hours} hours</p>
+                    <h4>📅 Booking #${booking.id} <span class="badge ${statusClass}">${statusEmoji[booking.status] || ''} ${escapeHtml(booking.status)}</span></h4>
+                    <p><strong>💼 Offer:</strong> ${escapeHtml(booking.offerTitle || 'N/A')} (ID: ${booking.offerId})</p>
+                    <p><strong>⏱️ Hours:</strong> ${booking.hours}</p>
+                    <p><strong>💰 Total Cost:</strong> ${booking.totalCost || booking.hours} hours</p>
                     ${isRequester ? 
-                        `<p><strong>Owner:</strong> ${escapeHtml(ownerName)}</p>` :
-                        `<p><strong>Requester:</strong> ${escapeHtml(requesterName)}</p>`
+                        `<p><strong>👤 Owner:</strong> ${escapeHtml(ownerName)}</p>` :
+                        `<p><strong>👤 Requester:</strong> ${escapeHtml(requesterName)}</p>`
                     }
-                    <p><strong>Status:</strong> ${escapeHtml(booking.status)}</p>
                     ${booking.status === 'PENDING' || booking.status === 'CONFIRMED' ? 
                         `<div class="actions">${actions}</div>` : ''
                     }
@@ -1018,9 +1410,12 @@
         }
         
         async function loadAllUsers(page = 0) {
+            const container = document.getElementById('allUsersList');
+            container.innerHTML = '<p class="empty-state">⏳ Loading users...</p>';
+            
             try {
-                const response = await fetch(`${API_BASE}/admin/users?page=${page}&size=10`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await apiCall(`/admin/users?page=${page}&size=10`, {
+                    method: 'GET'
                 });
                 
                 if (response.ok) {
@@ -1029,19 +1424,20 @@
                         displayUsers(result.content, 'allUsersList');
                         displayPagination(result, 'allUsersPagination', page, loadAllUsers);
                     } else {
-                        document.getElementById('allUsersList').innerHTML = '<p>No users found</p>';
+                        container.innerHTML = '<p class="empty-state">No users found</p>';
                     }
                     currentPage.allUsers = page;
                 } else {
-                    const errorText = await response.text();
-                    showMessage(`Access denied. Admin role required. (${response.status})`, 'error');
+                    if (response.status === 401 || response.status === 403) {
+                        container.innerHTML = '<p class="empty-state">Access denied. Admin role required.</p>';
+                    } else {
+                        const errorMsg = await parseErrorResponse(response);
+                        container.innerHTML = `<p class="empty-state">Failed to load users: ${errorMsg}</p>`;
+                    }
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error loading users: ' + error.message, 'error');
-                }
+                console.error('Error loading users:', error);
+                container.innerHTML = '<p class="empty-state">Cannot connect to server. Make sure backend is running.</p>';
             }
         }
         
@@ -1050,7 +1446,7 @@
             container.innerHTML = '';
             
             if (!users || users.length === 0) {
-                container.innerHTML = '<p>No users found</p>';
+                container.innerHTML = '<p class="empty-state">📭 No users found</p>';
                 return;
             }
             
@@ -1059,24 +1455,28 @@
                 card.className = 'item-card';
                 
                 const walletInfo = user.wallet ? 
-                    `<p><strong>Balance:</strong> ${user.wallet.balance} hours</p>
-                     <p><strong>Total Earned:</strong> ${user.wallet.totalEarned} hours</p>
-                     <p><strong>Total Spent:</strong> ${user.wallet.totalSpent} hours</p>` :
-                    '<p>No wallet</p>';
+                    `<div style="margin-top: 10px; padding: 12px; background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%); border-radius: var(--radius-sm); border: 1px solid var(--gray-light);">
+                        <p><strong>💰 Balance:</strong> <span style="color: var(--success); font-weight: 700;">${user.wallet.balance}</span> hours</p>
+                        <p><strong>📈 Total Earned:</strong> <span style="color: var(--info); font-weight: 700;">${user.wallet.totalEarned}</span> hours</p>
+                        <p><strong>📉 Total Spent:</strong> <span style="color: var(--danger); font-weight: 700;">${user.wallet.totalSpent}</span> hours</p>
+                    </div>` :
+                    '<p style="padding: 10px; background: var(--gray-light); border-radius: var(--radius-sm);">💼 No wallet</p>';
+                
+                const roleEmoji = user.role === 'ADMIN' ? '👑' : '👤';
                 
                 card.innerHTML = `
-                    <h4>${escapeHtml(user.firstName)} ${escapeHtml(user.lastName)} <span class="badge ${user.active ? 'active' : 'inactive'}">${user.active ? 'ACTIVE' : 'INACTIVE'}</span></h4>
-                    <p><strong>ID:</strong> ${user.id}</p>
-                    <p><strong>Email:</strong> ${escapeHtml(user.email)}</p>
-                    <p><strong>Role:</strong> ${escapeHtml(user.role)}</p>
-                    <p><strong>Faculty:</strong> ${escapeHtml(user.faculty || 'N/A')}</p>
+                    <h4>${roleEmoji} ${escapeHtml(user.firstName)} ${escapeHtml(user.lastName)} <span class="badge ${user.active ? 'active' : 'inactive'}">${user.active ? 'ACTIVE' : 'INACTIVE'}</span></h4>
+                    <p><strong>🔢 ID:</strong> ${user.id}</p>
+                    <p><strong>✉️ Email:</strong> ${escapeHtml(user.email)}</p>
+                    <p><strong>🎭 Role:</strong> ${escapeHtml(user.role)}</p>
+                    <p><strong>🏫 Faculty:</strong> ${escapeHtml(user.faculty || 'N/A')}</p>
                     ${walletInfo}
                     <div class="actions">
                         ${user.active ? 
-                            `<button class="secondary" onclick="deactivateUser(${user.id})">Deactivate</button>` :
-                            `<button class="success" onclick="activateUser(${user.id})">Activate</button>`
+                            `<button class="secondary" onclick="deactivateUser(${user.id})">⏸️ Deactivate</button>` :
+                            `<button class="success" onclick="activateUser(${user.id})">▶️ Activate</button>`
                         }
-                        <button onclick="updateUserRole(${user.id})">Change Role</button>
+                        <button onclick="updateUserRole(${user.id})">🔄 Change Role</button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -1084,9 +1484,12 @@
         }
         
         async function loadAllTransactions(page = 0) {
+            const container = document.getElementById('allTransactionsList');
+            container.innerHTML = '<p class="empty-state">⏳ Loading transactions...</p>';
+            
             try {
-                const response = await fetch(`${API_BASE}/admin/transactions?page=${page}&size=10`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await apiCall(`/admin/transactions?page=${page}&size=10`, {
+                    method: 'GET'
                 });
                 
                 if (response.ok) {
@@ -1095,19 +1498,20 @@
                         displayTransactions(result.content, 'allTransactionsList');
                         displayPagination(result, 'allTransactionsPagination', page, loadAllTransactions);
                     } else {
-                        document.getElementById('allTransactionsList').innerHTML = '<p>No transactions found</p>';
+                        container.innerHTML = '<p class="empty-state">No transactions found</p>';
                     }
                     currentPage.allTransactions = page;
                 } else {
-                    const errorText = await response.text();
-                    showMessage(`Access denied. Admin role required. (${response.status})`, 'error');
+                    if (response.status === 401 || response.status === 403) {
+                        container.innerHTML = '<p class="empty-state">Access denied. Admin role required.</p>';
+                    } else {
+                        const errorMsg = await parseErrorResponse(response);
+                        container.innerHTML = `<p class="empty-state">Failed to load transactions: ${errorMsg}</p>`;
+                    }
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error loading transactions: ' + error.message, 'error');
-                }
+                console.error('Error loading transactions:', error);
+                container.innerHTML = '<p class="empty-state">Cannot connect to server. Make sure backend is running.</p>';
             }
         }
         
@@ -1116,7 +1520,7 @@
             container.innerHTML = '';
             
             if (!transactions || transactions.length === 0) {
-                container.innerHTML = '<p>No transactions found</p>';
+                container.innerHTML = '<p class="empty-state">📭 No transactions found</p>';
                 return;
             }
             
@@ -1127,14 +1531,17 @@
                 const userEmail = transaction.userEmail || 'N/A';
                 const description = transaction.description || 'N/A';
                 const date = transaction.createdAt ? new Date(transaction.createdAt).toLocaleString() : 'N/A';
+                const typeEmoji = transaction.type === 'EARNED' ? '📈' : transaction.type === 'SPENT' ? '📉' : '💰';
+                const statusEmoji = transaction.status === 'COMPLETED' ? '✅' : transaction.status === 'PENDING' ? '⏳' : '❌';
+                
                 card.innerHTML = `
-                    <h4>Transaction #${transaction.id}</h4>
-                    <p><strong>User:</strong> ${escapeHtml(userName)} (${escapeHtml(userEmail)})</p>
-                    <p><strong>Type:</strong> ${escapeHtml(transaction.type)}</p>
-                    <p><strong>Amount:</strong> ${transaction.amount} hours</p>
-                    <p><strong>Status:</strong> ${escapeHtml(transaction.status)}</p>
-                    <p><strong>Description:</strong> ${escapeHtml(description)}</p>
-                    <p><strong>Date:</strong> ${date}</p>
+                    <h4>${typeEmoji} Transaction #${transaction.id}</h4>
+                    <p><strong>👤 User:</strong> ${escapeHtml(userName)} (${escapeHtml(userEmail)})</p>
+                    <p><strong>🎭 Type:</strong> ${escapeHtml(transaction.type)}</p>
+                    <p><strong>💰 Amount:</strong> ${transaction.amount} hours</p>
+                    <p><strong>${statusEmoji} Status:</strong> ${escapeHtml(transaction.status)}</p>
+                    <p><strong>📝 Description:</strong> ${escapeHtml(description)}</p>
+                    <p><strong>📅 Date:</strong> ${date}</p>
                 `;
                 container.appendChild(card);
             });
@@ -1148,18 +1555,20 @@
             
             if (currentPageNum > 0) {
                 const prevBtn = document.createElement('button');
-                prevBtn.textContent = 'Previous';
+                prevBtn.textContent = '⬅️ Previous';
+                prevBtn.className = 'secondary';
                 prevBtn.onclick = () => loadFunction(currentPageNum - 1);
                 container.appendChild(prevBtn);
             }
             
             const pageInfo = document.createElement('span');
-            pageInfo.textContent = `Page ${currentPageNum + 1} of ${data.totalPages}`;
+            pageInfo.innerHTML = `📄 Page <strong>${currentPageNum + 1}</strong> of <strong>${data.totalPages}</strong>`;
+            pageInfo.style.padding = '0 20px';
             container.appendChild(pageInfo);
             
             if (currentPageNum < data.totalPages - 1) {
                 const nextBtn = document.createElement('button');
-                nextBtn.textContent = 'Next';
+                nextBtn.textContent = 'Next ➡️';
                 nextBtn.onclick = () => loadFunction(currentPageNum + 1);
                 container.appendChild(nextBtn);
             }
@@ -1167,65 +1576,45 @@
         
         // Action functions
         async function confirmBooking(bookingId) {
+            if (!confirm('Are you sure you want to confirm this booking?')) return;
+            
             try {
-                const response = await fetch(`${API_BASE}/bookings/${bookingId}/confirm`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await apiCall(`/bookings/${bookingId}/confirm`, {
+                    method: 'PUT'
                 });
                 
                 if (response.ok) {
-                    showMessage('Booking confirmed!', 'success');
+                    showMessage('✅ Booking confirmed!', 'success');
                     loadMyBookingsAsOwner(currentPage.myBookingsOwner);
                     loadMyBookingsAsRequester(currentPage.myBookingsRequester);
                 } else {
-                    const errorText = await response.text();
-                    let errorMsg = 'Failed to confirm booking';
-                    try {
-                        const errorJson = JSON.parse(errorText);
-                        errorMsg = errorJson.message || errorMsg;
-                    } catch (e) {
-                        errorMsg = errorText || errorMsg;
-                    }
-                    showMessage(errorMsg, 'error');
+                    const errorMsg = await parseErrorResponse(response);
+                    showMessage(errorMsg || 'Failed to confirm booking', 'error');
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error: ' + error.message, 'error');
-                }
+                handleApiError(error, 'Confirm booking');
             }
         }
         
         async function completeBooking(bookingId) {
+            if (!confirm('Are you sure you want to complete this booking? This will transfer hours.')) return;
+            
             try {
-                const response = await fetch(`${API_BASE}/bookings/${bookingId}/complete`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await apiCall(`/bookings/${bookingId}/complete`, {
+                    method: 'PUT'
                 });
                 
                 if (response.ok) {
-                    showMessage('Booking completed!', 'success');
+                    showMessage('🎉 Booking completed! Hours have been transferred.', 'success');
                     loadMyBookingsAsOwner(currentPage.myBookingsOwner);
                     loadMyBookingsAsRequester(currentPage.myBookingsRequester);
                     refreshUserInfo();
                 } else {
-                    const errorText = await response.text();
-                    let errorMsg = 'Failed to complete booking';
-                    try {
-                        const errorJson = JSON.parse(errorText);
-                        errorMsg = errorJson.message || errorMsg;
-                    } catch (e) {
-                        errorMsg = errorText || errorMsg;
-                    }
-                    showMessage(errorMsg, 'error');
+                    const errorMsg = await parseErrorResponse(response);
+                    showMessage(errorMsg || 'Failed to complete booking', 'error');
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error: ' + error.message, 'error');
-                }
+                handleApiError(error, 'Complete booking');
             }
         }
         
@@ -1234,178 +1623,116 @@
             if (reason === null) return; // User cancelled
             
             try {
-                const response = await fetch(`${API_BASE}/bookings/${bookingId}/cancel?reason=${encodeURIComponent(reason || 'No reason provided')}`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await apiCall(`/bookings/${bookingId}/cancel?reason=${encodeURIComponent(reason || 'No reason provided')}`, {
+                    method: 'PUT'
                 });
                 
                 if (response.ok) {
-                    showMessage('Booking cancelled!', 'success');
+                    showMessage('❌ Booking cancelled!', 'success');
                     loadMyBookingsAsOwner(currentPage.myBookingsOwner);
                     loadMyBookingsAsRequester(currentPage.myBookingsRequester);
                     refreshUserInfo();
                 } else {
-                    const errorText = await response.text();
-                    let errorMsg = 'Failed to cancel booking';
-                    try {
-                        const errorJson = JSON.parse(errorText);
-                        errorMsg = errorJson.message || errorMsg;
-                    } catch (e) {
-                        errorMsg = errorText || errorMsg;
-                    }
-                    showMessage(errorMsg, 'error');
+                    const errorMsg = await parseErrorResponse(response);
+                    showMessage(errorMsg || 'Failed to cancel booking', 'error');
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error: ' + error.message, 'error');
-                }
+                handleApiError(error, 'Cancel booking');
             }
         }
         
         async function activateOffer(offerId) {
             try {
-                const response = await fetch(`${API_BASE}/offers/${offerId}/activate`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await apiCall(`/offers/${offerId}/activate`, {
+                    method: 'PUT'
                 });
                 
                 if (response.ok) {
-                    showMessage('Offer activated!', 'success');
+                    showMessage('▶️ Offer activated!', 'success');
                     loadMyOffers();
                     loadActiveOffers(currentPage.activeOffers);
                 } else {
-                    const errorText = await response.text();
-                    let errorMsg = 'Failed to activate offer';
-                    try {
-                        const errorJson = JSON.parse(errorText);
-                        errorMsg = errorJson.message || errorMsg;
-                    } catch (e) {
-                        errorMsg = errorText || errorMsg;
-                    }
-                    showMessage(errorMsg, 'error');
+                    const errorMsg = await parseErrorResponse(response);
+                    showMessage(errorMsg || 'Failed to activate offer', 'error');
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error: ' + error.message, 'error');
-                }
+                handleApiError(error, 'Activate offer');
             }
         }
         
         async function deactivateOffer(offerId) {
             try {
-                const response = await fetch(`${API_BASE}/offers/${offerId}/deactivate`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await apiCall(`/offers/${offerId}/deactivate`, {
+                    method: 'PUT'
                 });
                 
                 if (response.ok) {
-                    showMessage('Offer deactivated!', 'success');
+                    showMessage('⏸️ Offer deactivated!', 'success');
                     loadMyOffers();
                     loadActiveOffers(currentPage.activeOffers);
                 } else {
-                    const errorText = await response.text();
-                    let errorMsg = 'Failed to deactivate offer';
-                    try {
-                        const errorJson = JSON.parse(errorText);
-                        errorMsg = errorJson.message || errorMsg;
-                    } catch (e) {
-                        errorMsg = errorText || errorMsg;
-                    }
-                    showMessage(errorMsg, 'error');
+                    const errorMsg = await parseErrorResponse(response);
+                    showMessage(errorMsg || 'Failed to deactivate offer', 'error');
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error: ' + error.message, 'error');
-                }
+                handleApiError(error, 'Deactivate offer');
             }
         }
         
         async function updateOffer(offerId) {
             const title = prompt('New title:', '');
-            if (title === null) return; // User cancelled
+            if (title === null || !title.trim()) return; // User cancelled or empty
             
             const description = prompt('New description:', '');
-            if (description === null) return;
+            if (description === null || !description.trim()) return;
             
             const hoursRate = prompt('New hours rate:', '');
-            if (hoursRate === null) return;
+            if (hoursRate === null || !hoursRate.trim()) return;
             
-            if (!title || !description || !hoursRate) {
-                showMessage('All fields are required', 'error');
+            const hoursRateNum = parseFloat(hoursRate);
+            if (isNaN(hoursRateNum) || hoursRateNum <= 0) {
+                showMessage('Hours rate must be a positive number', 'error');
                 return;
             }
             
             try {
-                const response = await fetch(`${API_BASE}/offers/${offerId}`, {
+                const response = await apiCall(`/offers/${offerId}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
                     body: JSON.stringify({
-                        title,
-                        description,
-                        hoursRate: parseFloat(hoursRate)
+                        title: title.trim(),
+                        description: description.trim(),
+                        hoursRate: hoursRateNum
                     })
                 });
                 
                 if (response.ok) {
-                    showMessage('Offer updated!', 'success');
+                    showMessage('✏️ Offer updated!', 'success');
                     loadMyOffers();
                     loadActiveOffers(currentPage.activeOffers);
                 } else {
-                    const errorText = await response.text();
-                    let errorMsg = 'Failed to update offer';
-                    try {
-                        const errorJson = JSON.parse(errorText);
-                        errorMsg = errorJson.message || errorMsg;
-                    } catch (e) {
-                        errorMsg = errorText || errorMsg;
-                    }
-                    showMessage(errorMsg, 'error');
+                    const errorMsg = await parseErrorResponse(response);
+                    showMessage(errorMsg || 'Failed to update offer', 'error');
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error: ' + error.message, 'error');
-                }
+                handleApiError(error, 'Update offer');
             }
         }
         
         async function activateUser(userId) {
             try {
-                const response = await fetch(`${API_BASE}/admin/users/${userId}/activate`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await apiCall(`/admin/users/${userId}/activate`, {
+                    method: 'PUT'
                 });
                 
                 if (response.ok) {
-                    showMessage('User activated!', 'success');
+                    showMessage('▶️ User activated!', 'success');
                     loadAllUsers(currentPage.allUsers);
                 } else {
-                    const errorText = await response.text();
-                    let errorMsg = 'Failed to activate user';
-                    try {
-                        const errorJson = JSON.parse(errorText);
-                        errorMsg = errorJson.message || errorMsg;
-                    } catch (e) {
-                        errorMsg = errorText || errorMsg;
-                    }
-                    showMessage(errorMsg, 'error');
+                    const errorMsg = await parseErrorResponse(response);
+                    showMessage(errorMsg || 'Failed to activate user', 'error');
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error: ' + error.message, 'error');
-                }
+                handleApiError(error, 'Activate user');
             }
         }
         
@@ -1413,31 +1740,19 @@
             if (!confirm('Are you sure you want to deactivate this user?')) return;
             
             try {
-                const response = await fetch(`${API_BASE}/admin/users/${userId}/deactivate`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await apiCall(`/admin/users/${userId}/deactivate`, {
+                    method: 'PUT'
                 });
                 
                 if (response.ok) {
-                    showMessage('User deactivated!', 'success');
+                    showMessage('⏸️ User deactivated!', 'success');
                     loadAllUsers(currentPage.allUsers);
                 } else {
-                    const errorText = await response.text();
-                    let errorMsg = 'Failed to deactivate user';
-                    try {
-                        const errorJson = JSON.parse(errorText);
-                        errorMsg = errorJson.message || errorMsg;
-                    } catch (e) {
-                        errorMsg = errorText || errorMsg;
-                    }
-                    showMessage(errorMsg, 'error');
+                    const errorMsg = await parseErrorResponse(response);
+                    showMessage(errorMsg || 'Failed to deactivate user', 'error');
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error: ' + error.message, 'error');
-                }
+                handleApiError(error, 'Deactivate user');
             }
         }
         
@@ -1445,62 +1760,35 @@
             const role = prompt('New role (STUDENT, ADMIN):', '');
             if (!role || role === null) return;
             
+            const roleUpper = role.toUpperCase();
+            if (roleUpper !== 'STUDENT' && roleUpper !== 'ADMIN') {
+                showMessage('Role must be STUDENT or ADMIN', 'error');
+                return;
+            }
+            
             try {
-                const response = await fetch(`${API_BASE}/admin/users/${userId}/role`, {
+                const response = await apiCall(`/admin/users/${userId}/role`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ role: role.toUpperCase() })
+                    body: JSON.stringify({ role: roleUpper })
                 });
                 
                 if (response.ok) {
-                    showMessage('User role updated!', 'success');
+                    showMessage('🔄 User role updated!', 'success');
                     loadAllUsers(currentPage.allUsers);
                 } else {
-                    const errorText = await response.text();
-                    let errorMsg = 'Failed to update role';
-                    try {
-                        const errorJson = JSON.parse(errorText);
-                        errorMsg = errorJson.message || errorMsg;
-                    } catch (e) {
-                        errorMsg = errorText || errorMsg;
-                    }
-                    showMessage(errorMsg, 'error');
+                    const errorMsg = await parseErrorResponse(response);
+                    showMessage(errorMsg || 'Failed to update role', 'error');
                 }
             } catch (error) {
-                if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
-                    showMessage('Cannot connect to server. Make sure backend is running on http://localhost:8080', 'error');
-                } else {
-                    showMessage('Error: ' + error.message, 'error');
-                }
+                handleApiError(error, 'Update user role');
             }
         }
         
-        async function checkAuth() {
-            try {
-                const response = await fetch(`${API_BASE}/users/me`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                
-                if (response.ok) {
-                    currentUser = await response.json();
-                    updateUI();
-                    refreshUserInfo();
-                    // loadActiveOffers is called in updateUI()
-                } else {
-                    logout();
-                }
-            } catch (error) {
-                logout();
-            }
-        }
         
         async function refreshUserInfo() {
             try {
-                const response = await fetch(`${API_BASE}/users/me`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const response = await apiCall('/users/me', {
+                    method: 'GET'
                 });
                 
                 if (response.ok) {
@@ -1508,24 +1796,63 @@
                     const userInfo = document.getElementById('userInfo');
                     
                     const walletInfo = currentUser.wallet ? 
-                        `<p><strong>Balance:</strong> ${currentUser.wallet.balance} hours</p>
-                         <p><strong>Total Earned:</strong> ${currentUser.wallet.totalEarned} hours</p>
-                         <p><strong>Total Spent:</strong> ${currentUser.wallet.totalSpent} hours</p>` :
-                        '<p>No wallet yet</p>';
+                        `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                            <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); padding: 15px; border-radius: var(--radius-sm); border: 2px solid var(--success);">
+                                <strong style="color: var(--success); font-size: 0.9rem; display: block; margin-bottom: 5px;">💰 Balance</strong>
+                                <span style="font-size: 1.5rem; font-weight: 700; color: var(--dark);">${currentUser.wallet.balance}</span>
+                                <span style="color: var(--gray); font-size: 0.9rem;">hours</span>
+                            </div>
+                            <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); padding: 15px; border-radius: var(--radius-sm); border: 2px solid var(--info);">
+                                <strong style="color: var(--info); font-size: 0.9rem; display: block; margin-bottom: 5px;">📈 Total Earned</strong>
+                                <span style="font-size: 1.5rem; font-weight: 700; color: var(--dark);">${currentUser.wallet.totalEarned}</span>
+                                <span style="color: var(--gray); font-size: 0.9rem;">hours</span>
+                            </div>
+                            <div style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); padding: 15px; border-radius: var(--radius-sm); border: 2px solid var(--danger);">
+                                <strong style="color: var(--danger); font-size: 0.9rem; display: block; margin-bottom: 5px;">📉 Total Spent</strong>
+                                <span style="font-size: 1.5rem; font-weight: 700; color: var(--dark);">${currentUser.wallet.totalSpent}</span>
+                                <span style="color: var(--gray); font-size: 0.9rem;">hours</span>
+                            </div>
+                        </div>` :
+                        '<p style="padding: 15px; background: var(--gray-light); border-radius: var(--radius-sm);">💼 No wallet yet</p>';
                     
+                    const roleEmoji = currentUser.role === 'ADMIN' ? '👑' : '👤';
                     userInfo.innerHTML = `
-                        <h3>${currentUser.firstName} ${currentUser.lastName}</h3>
-                        <p><strong>Email:</strong> ${currentUser.email}</p>
-                        <p><strong>Role:</strong> ${currentUser.role}</p>
-                        <p><strong>Faculty:</strong> ${currentUser.faculty || 'N/A'}</p>
-                        <p><strong>Student ID:</strong> ${currentUser.studentId || 'N/A'}</p>
-                        <p><strong>Status:</strong> ${currentUser.active ? 'Active' : 'Inactive'}</p>
-                        <h4>Wallet</h4>
+                        <h3>${roleEmoji} ${escapeHtml(currentUser.firstName)} ${escapeHtml(currentUser.lastName)}</h3>
+                        <p><strong>✉️ Email:</strong> ${escapeHtml(currentUser.email)}</p>
+                        <p><strong>🎭 Role:</strong> ${escapeHtml(currentUser.role)}</p>
+                        <p><strong>🏫 Faculty:</strong> ${escapeHtml(currentUser.faculty || 'N/A')}</p>
+                        <p><strong>🎓 Student ID:</strong> ${escapeHtml(currentUser.studentId || 'N/A')}</p>
+                        <p><strong>${currentUser.active ? '✅ Active' : '⏸️ Inactive'}</strong></p>
+                        <h4 style="margin-top: 20px; margin-bottom: 10px;">💼 Wallet</h4>
                         ${walletInfo}
                     `;
+                } else {
+                    if (response.status === 401 || response.status === 403) {
+                        logout();
+                    }
                 }
             } catch (error) {
-                showMessage('Error loading user info: ' + error.message, 'error');
+                console.error('Error loading user info:', error);
+                // Don't show error message for user info, just log it
+            }
+        }
+        
+        async function checkAuth() {
+            try {
+                const response = await apiCall('/users/me', {
+                    method: 'GET'
+                });
+                
+                if (response.ok) {
+                    currentUser = await response.json();
+                    updateUI();
+                    refreshUserInfo();
+                } else {
+                    logout();
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+                logout();
             }
         }
         
@@ -1564,14 +1891,17 @@
             currentUser = null;
             localStorage.removeItem('token');
             updateUI();
-            showMessage('Logged out', 'success');
+            showMessage('🚪 Logged out successfully', 'success');
         }
         
         function showMessage(message, type) {
             const messageDiv = document.getElementById('messageDiv');
             messageDiv.className = `message ${type}`;
-            messageDiv.textContent = message;
+            messageDiv.innerHTML = message; // Use innerHTML to support emojis and formatting
             messageDiv.classList.remove('hidden');
+            
+            // Auto-scroll to message
+            messageDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             
             // Show error messages longer than success messages
             const timeout = type === 'error' ? 10000 : 5000;
