@@ -56,11 +56,14 @@ public class SecurityConfig {
         // Allow all origins for development
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        // Explicitly allow Authorization header
         configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.addExposedHeader("Authorization");
+        configuration.addExposedHeader("Content-Type");
         // Note: allowCredentials cannot be true with "*" origin pattern
         // For local development, this should work fine
         configuration.setAllowCredentials(false);
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
