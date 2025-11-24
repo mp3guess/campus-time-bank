@@ -1080,10 +1080,12 @@
                     const result = await response.json();
                     showMessage('✨ Booking created successfully!', 'success');
                     document.getElementById('createBookingForm').reset();
-                    // Reload bookings after a short delay
+                    // Reload bookings and offers after a short delay
                     setTimeout(() => {
                         loadMyBookingsAsRequester();
                         loadMyBookingsAsOwner();
+                        loadMyOffers(); // Refresh offers for owner
+                        loadActiveOffers(currentPage.activeOffers); // Refresh active offers list
                         refreshUserInfo();
                     }, 500);
                 } else {
@@ -1206,9 +1208,14 @@
             
             // Check if user is authenticated
             const currentToken = localStorage.getItem('token');
-            if (!currentToken || !token) {
+            if (!currentToken) {
                 container.innerHTML = '<p class="empty-state">🔐 Please log in to view your offers</p>';
                 return;
+            }
+            
+            // Update global token variable
+            if (currentToken !== token) {
+                token = currentToken;
             }
             
             try {
@@ -1226,9 +1233,12 @@
                 } else {
                     if (response.status === 401 || response.status === 403) {
                         container.innerHTML = '<p class="empty-state">🔐 Please log in to view your offers</p>';
-                        // Clear invalid token
+                        // Clear invalid token and logout
                         if (response.status === 401) {
-                            logout();
+                            localStorage.removeItem('token');
+                            token = null;
+                            currentUser = null;
+                            updateUI();
                         }
                     } else {
                         const errorMsg = await parseErrorResponse(response);
@@ -1403,11 +1413,13 @@
                      <button class="success" onclick="completeBooking(${booking.id})">🎉 Complete</button>
                      <button class="danger" onclick="cancelBooking(${booking.id})">❌ Cancel</button>`;
                 
+                const hours = booking.reservedHours || booking.hours || 0;
+                const transferredHours = booking.transferredHours || 0;
                 card.innerHTML = `
                     <h4>📅 Booking #${booking.id} <span class="badge ${statusClass}">${statusEmoji[booking.status] || ''} ${escapeHtml(booking.status)}</span></h4>
                     <p><strong>💼 Offer:</strong> ${escapeHtml(booking.offerTitle || 'N/A')} (ID: ${booking.offerId})</p>
-                    <p><strong>⏱️ Hours:</strong> ${booking.hours}</p>
-                    <p><strong>💰 Total Cost:</strong> ${booking.totalCost || booking.hours} hours</p>
+                    <p><strong>⏱️ Reserved Hours:</strong> ${hours} hours</p>
+                    ${transferredHours > 0 ? `<p><strong>💰 Transferred Hours:</strong> ${transferredHours} hours</p>` : ''}
                     ${isRequester ? 
                         `<p><strong>👤 Owner:</strong> ${escapeHtml(ownerName)}</p>` :
                         `<p><strong>👤 Requester:</strong> ${escapeHtml(requesterName)}</p>`
@@ -1595,9 +1607,13 @@
                 });
                 
                 if (response.ok) {
-                    showMessage('✅ Booking confirmed!', 'success');
-                    loadMyBookingsAsOwner(currentPage.myBookingsOwner);
-                    loadMyBookingsAsRequester(currentPage.myBookingsRequester);
+                    showMessage('✅ Booking confirmed! Hours have been transferred.', 'success');
+                    setTimeout(() => {
+                        loadMyBookingsAsOwner(currentPage.myBookingsOwner);
+                        loadMyBookingsAsRequester(currentPage.myBookingsRequester);
+                        loadMyOffers(); // Refresh offers
+                        refreshUserInfo(); // Refresh wallet balance
+                    }, 300);
                 } else {
                     const errorMsg = await parseErrorResponse(response);
                     showMessage(errorMsg || 'Failed to confirm booking', 'error');
@@ -1616,10 +1632,13 @@
                 });
                 
                 if (response.ok) {
-                    showMessage('🎉 Booking completed! Hours have been transferred.', 'success');
-                    loadMyBookingsAsOwner(currentPage.myBookingsOwner);
-                    loadMyBookingsAsRequester(currentPage.myBookingsRequester);
-                    refreshUserInfo();
+                    showMessage('🎉 Booking completed!', 'success');
+                    setTimeout(() => {
+                        loadMyBookingsAsOwner(currentPage.myBookingsOwner);
+                        loadMyBookingsAsRequester(currentPage.myBookingsRequester);
+                        loadMyOffers(); // Refresh offers
+                        refreshUserInfo(); // Refresh wallet balance
+                    }, 300);
                 } else {
                     const errorMsg = await parseErrorResponse(response);
                     showMessage(errorMsg || 'Failed to complete booking', 'error');
