@@ -1204,6 +1204,13 @@
             const container = document.getElementById('myOffersList');
             container.innerHTML = '<p class="empty-state">⏳ Loading your offers...</p>';
             
+            // Check if user is authenticated
+            const currentToken = localStorage.getItem('token');
+            if (!currentToken || !token) {
+                container.innerHTML = '<p class="empty-state">🔐 Please log in to view your offers</p>';
+                return;
+            }
+            
             try {
                 const response = await apiCall('/offers/my-offers', {
                     method: 'GET'
@@ -1219,6 +1226,10 @@
                 } else {
                     if (response.status === 401 || response.status === 403) {
                         container.innerHTML = '<p class="empty-state">🔐 Please log in to view your offers</p>';
+                        // Clear invalid token
+                        if (response.status === 401) {
+                            logout();
+                        }
                     } else {
                         const errorMsg = await parseErrorResponse(response);
                         container.innerHTML = `<p class="empty-state">❌ Failed to load offers: ${errorMsg}</p>`;

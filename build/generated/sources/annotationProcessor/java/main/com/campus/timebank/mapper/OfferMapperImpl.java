@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-04T00:09:25+0100",
-    comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.14.1.jar, environment: Java 17.0.12 (Eclipse Adoptium)"
+    date = "2025-11-24T19:43:21+0100",
+    comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.4.jar, environment: Java 21.0.8 (Eclipse Adoptium)"
 )
 @Component
 public class OfferMapperImpl implements OfferMapper {
