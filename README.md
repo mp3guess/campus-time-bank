@@ -19,62 +19,38 @@
 
 ## 🚀 Quick Start
 
-### ⚡ Самый простой способ (один клик):
+### Option 1: Using Docker (Recommended)
 
-**Windows:**
-```batch
-START.bat
-```
-*(Автоматически откроет два окна терминала и запустит всё)*
-
-**Linux/Mac:**
 ```bash
-./START.sh
-```
-*(Автоматически откроет два терминала и запустит всё)*
+# Start backend and database
+./start.sh
 
-### 📝 Пошаговая инструкция:
-
-#### Windows:
-```batch
-# Шаг 1: Перейдите в папку проекта
-cd C:\Users\geldi\Desktop\time_bank
-
-# Шаг 2: Запустите бэкенд (Терминал 1)
-start-app.bat
-
-# Шаг 3: Откройте НОВЫЙ терминал и запустите фронтенд (Терминал 2)
-cd C:\Users\geldi\Desktop\time_bank
-start-frontend.bat
-```
-
-#### Linux/Mac:
-```bash
-# Шаг 1: Перейдите в папку проекта
-cd ~/Desktop/time_bank
-
-# Шаг 2: Запустите бэкенд (Терминал 1)
-./start-app.sh
-
-# Шаг 3: Откройте НОВЫЙ терминал и запустите фронтенд (Терминал 2)
-cd ~/Desktop/time_bank
+# In another terminal, start frontend
 ./start-frontend.sh
 ```
 
-**📖 Полная инструкция с командами:** См. `START_HERE.md`
+### Option 2: Using Gradle Wrapper
 
-### Альтернативные способы:
-- **Только Docker**: `./start.sh` (Linux/Mac) или используйте `start-app.bat`/`start-app.sh`
-- **Локально с Gradle**: `./gradlew bootRun` (автоматически загрузит Gradle если нужно)
-- **Через IDE**: Откройте проект и запустите `CampusTimeBankApplication.main()`
+```bash
+# Make sure PostgreSQL is running on localhost:5432
+# Then run:
+./gradlew bootRun
 
-**📖 Подробные инструкции:** См. `QUICKSTART.md`, `FIX_RUN_ISSUE.md` или `RUN_LOCALLY.md`
+# In another terminal, start frontend
+./start-frontend.sh
+```
+
+### Option 3: Using IDE
+
+1. Open project in IntelliJ IDEA / VS Code
+2. Wait for indexing
+3. Run `CampusTimeBankApplication.main()`
 
 ## 🔗 Access Points
 
 - API: `http://localhost:8080/api`
 - Health: `http://localhost:8080/actuator/health`
-- Frontend: `http://localhost:8000/index.html` (после запуска `python -m http.server 8000`)
+- Frontend: `http://localhost:8000/index.html`
 - Database: `localhost:5432` (postgres/postgres)
 
 ## ✅ Status
@@ -91,6 +67,28 @@ cd ~/Desktop/time_bank
 **University:** University of Debrecen  
 **Status:** Complete & Production Ready
 
+## 🛑 Stopping the Application
+
+### Stop Docker containers:
+```bash
+./stop.sh
+# or
+docker-compose down
+```
+
+### Stop local application:
+Press `Ctrl+C` in the terminal
+
 ## 🐛 Troubleshooting
 
-Если возникают проблемы с запуском, см. `FIX_RUN_ISSUE.md`
+### "Docker is not running"
+**Solution:** Start Docker Desktop
+
+### "Java is not installed"
+**Solution:** Install Java 17+ from https://adoptium.net/
+
+### "Port 8080 is already in use"
+**Solution:** Stop other applications on port 8080 or change port in `application.yml`
+
+### "PostgreSQL connection failed"
+**Solution:** Make sure PostgreSQL is running on localhost:5432
