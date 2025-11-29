@@ -70,25 +70,46 @@ public class BookingService {
         Booking booking = bookingRepository.findByIdAndOfferOwnerId(bookingId, userPrincipal.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found or you don't have permission"));
         
-        // Check if requester has sufficient balance
+        // Get wallets for owner and requester
+        Wallet ownerWallet = walletRepository.findByUserId(booking.getOffer().getOwner().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Wallet not found for owner"));
+        
         Wallet requesterWallet = walletRepository.findByUserId(booking.getRequester().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Wallet not found for requester"));
         
-        if (!requesterWallet.hasBalance(booking.getReservedHours())) {
+        // Check if owner has sufficient balance (owner pays requester in this system)
+        if (!ownerWallet.hasBalance(booking.getReservedHours())) {
             throw new IllegalStateException("Insufficient balance to confirm booking");
         }
         
         booking.confirm();
         
-        // Create transaction for reservation
-        Transaction transaction = Transaction.builder()
-                .user(booking.getRequester())
+        // Transfer hours: owner pays, requester receives
+        ownerWallet.deductBalance(booking.getReservedHours());
+        requesterWallet.addBalance(booking.getReservedHours());
+        
+        walletRepository.save(ownerWallet);
+        walletRepository.save(requesterWallet);
+        
+        // Create transaction for owner (deduction)
+        Transaction ownerTransaction = Transaction.builder()
+                .user(booking.getOffer().getOwner())
                 .type(Transaction.TransactionType.RESERVE)
                 .amount(booking.getReservedHours())
                 .booking(booking)
                 .description("Reserved hours for booking offer: " + booking.getOffer().getTitle())
                 .build();
-        transactionRepository.save(transaction);
+        transactionRepository.save(ownerTransaction);
+        
+        // Create transaction for requester (addition)
+        Transaction requesterTransaction = Transaction.builder()
+                .user(booking.getRequester())
+                .type(Transaction.TransactionType.COMMIT)
+                .amount(booking.getReservedHours())
+                .booking(booking)
+                .description("Received hours from booking offer: " + booking.getOffer().getTitle())
+                .build();
+        transactionRepository.save(requesterTransaction);
         
         Booking savedBooking = bookingRepository.save(booking);
         return bookingMapper.toDto(savedBooking);
@@ -108,29 +129,14 @@ public class BookingService {
         
         booking.complete();
         
-        // Transfer hours from requester to owner
-        Wallet requesterWallet = walletRepository.findByUserId(booking.getRequester().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Wallet not found for requester"));
-        
-        Wallet ownerWallet = walletRepository.findByUserId(booking.getOffer().getOwner().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Wallet not found for owner"));
-        
-        // Deduct from requester
-        requesterWallet.deductBalance(booking.getTransferredHours());
-        
-        // Add to owner
-        ownerWallet.addBalance(booking.getTransferredHours());
-        
-        walletRepository.save(requesterWallet);
-        walletRepository.save(ownerWallet);
-        
-        // Create transaction for transfer (commit)
+        // Balance transfer already happened at confirmation, so we just mark as completed
+        // Create transaction record for completion
         Transaction transaction = Transaction.builder()
                 .user(booking.getOffer().getOwner())
                 .type(Transaction.TransactionType.COMMIT)
-                .amount(booking.getTransferredHours())
+                .amount(booking.getTransferredHours() != null ? booking.getTransferredHours() : booking.getReservedHours())
                 .booking(booking)
-                .description("Received hours from booking: " + booking.getOffer().getTitle())
+                .description("Completed booking: " + booking.getOffer().getTitle())
                 .build();
         transactionRepository.save(transaction);
         
@@ -193,7 +199,10 @@ public class BookingService {
     
     @Transactional(readOnly = true)
     public Page<BookingDto> getMyBookingsAsOwner(Pageable pageable) {
-        return bookingRepository.findByStatus("PENDING", pageable)
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        
+        return bookingRepository.findByOfferOwnerId(userPrincipal.getId(), pageable)
                 .map(bookingMapper::toDto);
     }
     
